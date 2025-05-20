@@ -1,6 +1,7 @@
 package com.nyam.model.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nyam.model.dao.UserDao;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	UserDao userDao;
 	
+	@Autowired
+	BCryptPasswordEncoder pwdEncoder;
+	
 	// 해당되는 User가 DB에 있는지 확인하고,
 	// DB에 있는 User를 갖고 온다.
 	@Override
@@ -22,8 +26,8 @@ public class UserServiceImpl implements UserService{
 		// 입력한 userId를 이용해서 dbUser를 가져온다.
 		User dbUser = userDao.selectByuserId(user.getUserId());
 		
-		// 입력한 userId와 dbUser의 비밀번호가 동일한지 확인한다. 
-		if( dbUser != null && dbUser.getPassword().equals(user.getPassword()) ) {
+		// 평문 비밀번호랑 DB에서 암호화한 비밀번호가 일치하는지 확인한다.
+		if( dbUser != null && pwdEncoder.matches(user.getPassword(), dbUser.getPassword())) {
 			return dbUser;
 		}else {
 			return null;
@@ -34,6 +38,10 @@ public class UserServiceImpl implements UserService{
 	// boolean 값을 반환 받는다.
 	@Override
 	public boolean registUser( User user ) {
+		// 회원 가입 시 비밀번호를 암호화하고, user 객체에 설정해준다.
+		String encodedPw = pwdEncoder.encode(user.getPassword());
+		user.setPassword(encodedPw);
+		
 		int result = userDao.insert(user);
 		
 		if( result ==1)

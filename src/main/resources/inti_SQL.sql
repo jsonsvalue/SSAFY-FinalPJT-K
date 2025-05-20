@@ -63,12 +63,12 @@ CREATE TABLE `follow` (
   `use_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'Y',
   `rgst_dttm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mdfc_dttm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('pending','accept','decline') NOT NULL DEFAULT 'pending',
   PRIMARY KEY (`id`),
   KEY `follow_idx_user_id` (`user_id`),
   KEY `follow_idx_follow_id` (`follow_id`),
   CONSTRAINT `follow_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- nyam_road.article_comment definition
 

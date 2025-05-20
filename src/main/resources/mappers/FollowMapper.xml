@@ -4,6 +4,19 @@
 <mapper namespace="com.nyam.model.dao.FollowDao">
 	
 	
+	<insert id = "follow" parameterType = "User">
+		INSERT INTO follow(
+			user_id, 
+			follow_id
+		)
+		VALUES (
+			#{userId},
+			#{followId}
+		);
+		
+	</insert>
+	
+	
 	<select id = "getFollow" parameterType = "String">
 		SELECT *
 		FROM follow
@@ -12,7 +25,7 @@
 	</select>
 	
 	
-	<select id = "getFollowers" parameterType = "String">
+	<select id = "getFollower" parameterType = "String">
 		SELECT *
 		FROM follow
 		WHERE follow_id = #{followId}

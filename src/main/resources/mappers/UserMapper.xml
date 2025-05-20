@@ -24,10 +24,7 @@
 			name,
 			email,
 			password,
-			role,
-			use_yn,
-			rgst_dttm,
-			mdfc_dttm
+			role
 		)
 		
 		VALUES (
@@ -35,10 +32,7 @@
 			#{name},
 			#{email},
 			#{password},
-			#{role},
-			#{useYN},
-			#{rgstDttm},
-			#{mdfcDttm}
+			#{role}
 		)
 		;
 	</insert>
