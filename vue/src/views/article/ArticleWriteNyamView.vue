@@ -12,7 +12,7 @@
                     <BFormTextarea v-model="content" placeholder="내용을 입력하세요" />
                 </BInputGroup>
             </div>
-            <ImageUploadComp />
+            <ImageUploadComp style="height: 500px;"/>
             <div v-for="(sub, index) in subArticle" :key="index">
                 <ArticleWriteDetailComp :subArticle="sub" />
             </div>
