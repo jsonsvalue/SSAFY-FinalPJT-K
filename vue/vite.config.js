@@ -23,5 +23,17 @@ export default defineConfig({
       "/api" : "http://localhost:8080",
     },
   },
-
+  css: {
+    preprocessorOptions: {
+        scss: {
+          silenceDeprecations: [
+            'import',
+            'mixed-decls',
+            'color-functions',
+            'global-builtin',
+            'legacy-js-api',
+          ],
+        },
+    },
+  },
 });

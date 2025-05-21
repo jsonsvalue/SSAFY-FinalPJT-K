@@ -3,19 +3,29 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "stackblitz": {
+    "startCommand": "npm start"
+  },
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
     "bootstrap-vue-next": "^0.29.3",
-    "vue": "^3.5.13"
+    "compressorjs": "^1.2.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
+    "sass": "^1.89.0",
+    "sass-loader": "^16.0.5",
     "vite": "^6.2.4",
-    "vite-plugin-vue-devtools": "^7.7.2"
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vue-loader": "^17.4.2"
   }
 }
