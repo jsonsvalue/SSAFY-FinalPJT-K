@@ -163,7 +163,7 @@ public class UserController {
 	@GetMapping("/find")
 	public ResponseEntity<?> findUser(@RequestParam("keyword")String keyword){
 		
-		//session이 없어도, 사용자는 검색해서 확인할 수 있게는 한다.
+		//session이 없어도, 사용자 목록은 검색해서 확인할 수 있게는 한다.
 		List<User> searchedUsers = userService.searchUser(keyword);
 		
 		return new ResponseEntity<List<User>>(searchedUsers, HttpStatus.OK);
