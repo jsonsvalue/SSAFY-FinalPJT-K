@@ -11,6 +11,10 @@
             <p>사이드</p>
         </div>
     </div>
+    <div class="float-button">
+        <RouterLink :to="{name:'ArticleWriteNyam'}">냠냠 작성</RouterLink>
+        <RouterLink :to="{name:'ArticleWriteRecipe'}">레시피 작성</RouterLink>
+    </div>
 </template>
 
 <script setup>
@@ -33,5 +37,13 @@ div.main>div {
 
 .center {
     flex : 0 0 700px;
+}
+
+.float-button {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
 }
 </style>

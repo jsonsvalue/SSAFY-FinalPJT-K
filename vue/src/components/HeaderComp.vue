@@ -9,9 +9,10 @@
                     </div>
                 </a>
                 <div id="searchBox" class="col-5 position-absolute translate-middle-x" style="left:50%">
-                    <BInputGroup>
+                    <BInputGroup class="w-100">
+                        <BFormSelect v-model="searchOption" :options="options" style="flex: 0 0 150px;"></BFormSelect>
                         <BFormInput/>
-                        <BButton class="bg-success"><img src="../assets/icon/search.svg" alt="search" width="25px"></BButton>
+                        <BButton class="btn-success" @click='search'><img src="../assets/icon/search.svg" alt="search" width="30px"></BButton>
                     </BInputGroup>
                 </div>
                 <div id="buttonBox" class="position-absolute col-3 h-100 d-flex align-items-center" style="right: 0%;">
@@ -29,7 +30,19 @@
 </template>
 
 <script setup>
-    import { BInputGroup,BFormInput,BButton } from 'bootstrap-vue-next';
+    import { BInputGroup,BFormInput,BButton,BFormSelect,BFormSelectOption } from 'bootstrap-vue-next';
+    import { ref } from 'vue';
+    const searchOption = ref('recipe');
+    const options = ref([
+        { value: 'recipe', text: '레시피' },
+        { value: 'nyam', text: '냠냠' },
+        { value: 'user', text: '사용자' }
+    ]);
+
+    const search = () => {
+        // 검색 로직 구현
+        console.log(`Searching for ${searchOption.value}`);
+    }
 </script>
 
 <style scoped>
