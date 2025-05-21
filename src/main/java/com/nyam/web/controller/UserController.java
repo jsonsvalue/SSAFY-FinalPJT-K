@@ -1,5 +1,7 @@
 package com.nyam.web.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nyam.model.dto.User;
@@ -156,5 +159,15 @@ public class UserController {
 		
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not logged in");
 	}
-	 
+	
+	@GetMapping("/find")
+	public ResponseEntity<?> findUser(@RequestParam("keyword")String keyword){
+		
+		//session이 없어도, 사용자 목록은 검색해서 확인할 수 있게는 한다.
+		List<User> searchedUsers = userService.searchUser(keyword);
+		
+		return new ResponseEntity<List<User>>(searchedUsers, HttpStatus.OK);
+	} 
+	
+	
 }

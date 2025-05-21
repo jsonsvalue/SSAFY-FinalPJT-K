@@ -1,5 +1,7 @@
 package com.nyam.model.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,5 +75,16 @@ public class UserServiceImpl implements UserService{
 		
 		return result == 1;
 	}
+
+	
+	@Override
+	public List<User> searchUser(String keyword) {
+		// 해당되는 keyword를 가진 user목록을 반환한다.  
+		List<User> searchedUsers = userDao.search(keyword);
+		
+		return searchedUsers;
+	}
+	
+	
 	
 }
