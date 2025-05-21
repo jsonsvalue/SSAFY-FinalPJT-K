@@ -26,6 +26,8 @@ CREATE TABLE `user` (
   `use_yn` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'Y',
   `rgst_dttm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `mdfc_dttm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `intro` varchar(400) DEFAULT NULL,
+  `feed_type` enum('rec','plc','all') NOT NULL DEFAULT 'rec',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `email` (`email`),
