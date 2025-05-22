@@ -12,15 +12,11 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleDetail {
+public class FileDto {
 	private int id;
-	private int articleId;
-	@NonNull
-	private int order;
-	@NonNull
-	private int imageId;
-	private int imageUrl;
-	private String content;
+	private String thumbFile;
+	private String compFile;
+	private String orgFile;
 	private String useYN;
 	private String rgstDttm;
 	private String mdfcDttm;

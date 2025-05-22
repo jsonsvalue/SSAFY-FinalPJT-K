@@ -1,6 +1,8 @@
 package com.nyam.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,10 +12,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ArticleMaster {
-	@NonNull
 	private int id;
-	private int tempId;
 	@NonNull
 	private String userId;
 	@NonNull
@@ -23,10 +25,7 @@ public class ArticleMaster {
 	private String imageUrl;
 	private String content;
 	private String ingredient;
-	@NonNull
 	private String useYN;
-	@NonNull
 	private String rgstDttm;
-	@NonNull
 	private String mdfcDttm;
 }

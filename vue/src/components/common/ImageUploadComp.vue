@@ -13,59 +13,43 @@
 </template>
 
 <script setup>
-    import { ref,defineProps,defineExpose,onMounted } from 'vue';
+    import { ref,onMounted } from 'vue';
+    
+    /* DOM */
     const input = ref(null)
     const image = ref(null)
-    const file = ref(null)
-    const isEmpty = ref(true)
     const box = ref(null)
-    defineExpose({
-        getFile: () => {
-            return file.value
-        },
-        isEdited: () => {
-            return isEdited
-        }
-    })
-    let isEdited = false
-    let url = ref(null)
-    const props = defineProps({
-        image: {
-            type: Object,
-            default: {
-                url : null,
-                file : null,
-                isEdited : false
-            }
-        }
-    })
+
+    /* 사용자 정의 변수 */
+    const isEmpty = ref(true)
+    const url = ref(null)
+    const uploadUrl = import.meta.env.VITE_API_URL + '/upload'
+    
+    /* 사용자 정의 함수 */
     const removeImage = () => {
-        if (url.value) {
-            URL.revokeObjectURL(url.value)
-        }
-        input.value.value = ''
-        file.value = null
         url.value = null
         isEmpty.value = true
     }
-    const uploadEvent = (event) => {
-        const selectedFile = input.value.files[0]
-        if (selectedFile) {
-            upload(selectedFile)
-        }
-    }
+    
     const upload = newFile => {
-        isEdited = true
-        if (url.value) {
-            URL.revokeObjectURL(url.value)
-        }
-        if (newFile) {
-            file.value = newFile
-            url.value = URL.createObjectURL(newFile)
-            image.value.src = url
-            isEmpty.value = false
-        }
+        axios.post(uploadUrl, newFile, {
+            headers: {
+                'Content-Type': 'application/octet-stream',
+            }
+        })
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.error(err); 
+        })
     }
+    
+    const openDialog = () => {
+        input.value.click()
+    }
+
+    /* 이벤트 리스너 */
     const dropEvent = (event) => {
         event.preventDefault()
         const droppedFiles = event.dataTransfer.files
@@ -74,16 +58,38 @@
             upload(selectedFile)
         }
     }
-    const openDialog = () => {
-        input.value.click()
+
+    const uploadEvent = (event) => {
+        const selectedFile = input.value.files[0]
+        if (selectedFile) {
+            upload(selectedFile)
+        }
     }
+    
+    /* 컴포넌트 정의 */
+    const emits = defineEmits(['onFileUpload','onFileRemove'])
+    const props = defineProps({
+        image: {
+            type: Object,
+            required: false
+        }
+    })
+
+    defineExpose({
+        getFile: () => {
+            return file.value
+        },
+        isEdited: () => {
+            return isEdited
+        }
+    })
 
     onMounted(() => {
         if (box.value.offsetWidth <= 300) {
             box.value.classList.add('small-box')
         }
-        if (props.image&&props.image.url) {
-            url.value = props.image.url
+        if (props.image) {
+            url.value = props.image
             isEmpty.value = false
         }
     })
