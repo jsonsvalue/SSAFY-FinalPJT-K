@@ -1,5 +1,7 @@
 package com.nyam.model.dto;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FileDto {
 	private int id;
-	private String thumbFile;
-	private String compFile;
 	private String orgFile;
 	private String useYN;
 	private String rgstDttm;

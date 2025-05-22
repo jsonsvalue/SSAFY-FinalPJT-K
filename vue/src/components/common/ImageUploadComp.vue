@@ -14,6 +14,7 @@
 
 <script setup>
     import { ref,onMounted } from 'vue';
+    import axios from 'axios'
     
     /* DOM */
     const input = ref(null)
@@ -24,6 +25,8 @@
     const isEmpty = ref(true)
     const url = ref(null)
     const uploadUrl = import.meta.env.VITE_API_URL + '/upload'
+
+    const resourcePath = import.meta.env.VITE_RESOURCE_PATH
     
     /* 사용자 정의 함수 */
     const removeImage = () => {
@@ -32,9 +35,9 @@
     }
     
     const upload = newFile => {
-        axios.post(uploadUrl, newFile, {
+        axios.post(uploadUrl, {file:newFile}, {
             headers: {
-                'Content-Type': 'application/octet-stream',
+                'Content-Type': 'multipart/form-data',
             }
         })
         .then(res => {
