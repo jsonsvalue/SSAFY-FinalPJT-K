@@ -51,11 +51,14 @@ public class UserController {
 	/**
 	 * 로그인한 사용자의 Session 정보를 갖고 온다.
 	 * **/
-	@GetMapping("/getSession")
-	public ResponseEntity<?> getSession(HttpSession session){
+	@GetMapping("/getUserInfo")
+	public ResponseEntity<?> getUserInfo(HttpSession session){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
 		if(sessUser != null) {
+			System.out.println("Get Session");
+			System.out.println(session);
+			
 			return new ResponseEntity<User>(sessUser, HttpStatus.OK);
 		}else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("There is no user attributed to the session");
