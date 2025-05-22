@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService {
 			e.printStackTrace();
 		}
 		FileDto dto = new FileDto(0, thumbName, compName, orgName, "", "", "");
-		
+		    
 //		int res = dao.insertFile(dto);
 //		if (res!=0) {
 //			return dto;
