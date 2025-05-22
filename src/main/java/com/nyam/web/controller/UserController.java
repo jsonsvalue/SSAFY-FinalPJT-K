@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
 public class UserController {
 	
 	UserService userService;
@@ -58,7 +57,7 @@ public class UserController {
 		
 		if(sessUser != null) {
 			System.out.println("Get Session");
-			System.out.println(session);
+			System.out.println(session.getId());
 			
 			return new ResponseEntity<User>(sessUser, HttpStatus.OK);
 		}else {

@@ -17,6 +17,9 @@ export const useUserStore = defineStore("user", ()=>{
       password,
       email,
       name
+    },
+    {
+      withCredentials:true
     })
     // response에서 받은 데이터를 통해서 session정보를 설정해준다.
     // 저장한 session정보를 이용해서, 사용자의 정보를 띄운다.
@@ -41,6 +44,9 @@ export const useUserStore = defineStore("user", ()=>{
     axios.post(`${REST_API_URL}/login`,{
       userId,
       password
+    },
+    {
+      withCredentials:true
     })
     // 로그인 성공 시 session Storage에 해당 정보 저장하고,
     // 다른 페이지로 이동한다.
