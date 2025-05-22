@@ -10,7 +10,9 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "node-sass":"node-sass",
+    "sass": "sass --load-path=node-modules/bootstrap ./src/assets/custom.scss ./src/assets/style.css"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

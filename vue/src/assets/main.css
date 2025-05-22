@@ -17,7 +17,11 @@
   --bs-danger-rgb: 220, 53, 69;
   --bs-light-rgb: 248, 249, 250;
   --bs-dark-rgb: 33, 37, 41;
+  --bs-btn-bg: #529e0a;
+  --bs-btn-bg-rgb: 82,158,10;
 }
+
+
 
 #app {
   font-weight: normal;
@@ -38,31 +42,31 @@ body {
 
 /* Font Test */
 @font-face {
-    font-family: 'Ownglyph_corncorn-Rg';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2412-1@1.0/Ownglyph_corncorn-Rg.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Ownglyph_corncorn-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2412-1@1.0/Ownglyph_corncorn-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'SDSamliphopangche_Outline';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'SDSamliphopangche_Outline';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts-20-12@1.0/SDSamliphopangche_Outline.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'BinggraeSamanco-Bold';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/BinggraeSamanco-Bold.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'BinggraeSamanco-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/BinggraeSamanco-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'TTSamlipCreamyWhiteR';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/TTSamlipCreamyWhiteR.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'TTSamlipCreamyWhiteR';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/TTSamlipCreamyWhiteR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
 .font1 {

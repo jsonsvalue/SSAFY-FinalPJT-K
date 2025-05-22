@@ -4,6 +4,9 @@ import SampleView from '@/views/SampleView.vue'
 import ArticleFeedView from '@/views/article/ArticleFeedView.vue'
 import LoginView from '@/views/user/LoginView.vue'
 import RegistView from '@/views/user/RegistView.vue'
+import ArticleWriteNyamView from '@/views/article/ArticleWriteNyamView.vue'
+import ArticleWriteRecipeView from '@/views/article/ArticleWriteRecipeView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +27,16 @@ const router = createRouter({
           component:ArticleFeedView
         },
       ]
+    },
+    {
+      path: '/write/nyam',
+      name: 'ArticleWriteNyam',
+      component: ArticleWriteNyamView,
+    },
+    {
+      path: '/write/recipe',
+      name: 'ArticleWriteRecipe',
+      component: ArticleWriteRecipeView,
     },
     {
       path: '/sample',
