@@ -33,7 +33,6 @@ build/
 .vscode/
 
 # 환경 설정 파일 (중요!)
-src/main/resources/application*.properties
 src/main/resources/application*.yml
 
 
