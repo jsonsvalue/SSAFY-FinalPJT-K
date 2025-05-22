@@ -1,5 +1,5 @@
 <template>
-    <div class="uploader-box" @drop="dropEvent" @dragover.prevent>
+    <div ref = "box" class="uploader-box" @drop="dropEvent" @dragover.prevent>
         <input ref="input" type="file" accept="image/*" @change="uploadEvent" style="display: none;">
         <div v-show="isEmpty" class="empty-box" @click="openDialog" >
             <img src="../../assets/icon/download.svg" alt="upload image" style="height: 70px;width: 70px;">
@@ -13,11 +13,12 @@
 </template>
 
 <script setup>
-    import { ref,defineProps,defineExpose } from 'vue';
+    import { ref,defineProps,defineExpose,onMounted } from 'vue';
     const input = ref(null)
     const image = ref(null)
     const file = ref(null)
     const isEmpty = ref(true)
+    const box = ref(null)
     defineExpose({
         getFile: () => {
             return file.value
@@ -29,15 +30,20 @@
     let isEdited = false
     let url = ref(null)
     const props = defineProps({
-        imageUrl: {
-            type: String,
-            default: null
+        image: {
+            type: Object,
+            default: {
+                url : null,
+                file : null,
+                isEdited : false
+            }
         }
     })
     const removeImage = () => {
         if (url.value) {
             URL.revokeObjectURL(url.value)
         }
+        input.value.value = ''
         file.value = null
         url.value = null
         isEmpty.value = true
@@ -72,10 +78,15 @@
         input.value.click()
     }
 
-    if (props.imageUrl) {
-        url.value = props.imageUrl
-        isEmpty.value = false
-    }
+    onMounted(() => {
+        if (box.value.offsetWidth <= 300) {
+            box.value.classList.add('small-box')
+        }
+        if (props.image&&props.image.url) {
+            url.value = props.image.url
+            isEmpty.value = false
+        }
+    })
 </script>
 
 <style scoped>
@@ -131,5 +142,9 @@
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    .small-box p {
+        display: none;
     }
 </style>

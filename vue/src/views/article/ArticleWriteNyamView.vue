@@ -17,7 +17,7 @@
                 <ArticleWriteDetailComp :subArticle="sub" />
             </div>
             <div class="addSub">
-                <BButton variant="outline-primary" @click="subArticle.push(newArticle)">추가</BButton>
+                <BButton variant="outline-primary" @click="addSubArticle">추가</BButton>
             </div>
             <div class="button-box">
                 <BButton variant="primary" @click="submitArticle">작성하기</BButton>
@@ -36,10 +36,14 @@
     const title = ref('');
     const content = ref('');
     const subArticle = ref([]);
-    const newArticle = {
-        content: 'new Content',
-        image:null
+
+    const addSubArticle = () => {
+        subArticle.value.push({
+            content: 'new Content',
+            image:null
+        });
     }
+    
 
     const submitArticle = () => {
         // Submit article logic
@@ -73,7 +77,8 @@
     .button-box {
         display: flex;
         justify-content: flex-end;
-        margin-top: 10px;
+        margin-top: 30px;
+        margin-bottom: 50px;
     }
 
     .button-box button {
@@ -83,5 +88,6 @@
     .addSub button {
         width: 100%;
         height: 50px;
+        margin-top: 10px;
     }
 </style>

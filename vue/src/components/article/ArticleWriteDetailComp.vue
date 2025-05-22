@@ -1,10 +1,10 @@
 <template>
     <div class="detail-box">
         <div class="detail-image-box">
-            <ImageUploadComp />
+            <ImageUploadComp :image="subArticle.image"/>
         </div>
         <div class="detail">
-            <p>{{props.subArticle.content}}</p>
+            <textarea class="form-control" v-model="props.subArticle.content" rows="5"></textarea>
         </div>
         <div class="detail-button-box">
             <button class="btn btn-primary" @click="moveUp">Up</button>
@@ -22,7 +22,11 @@
     const props = defineProps({
         subArticle: {
             type: Object,
-            required: true
+            required: true,
+            default: {
+                content: '',
+                image: null
+            }
         }
     });
 
@@ -47,20 +51,34 @@
         display: flex;
         margin-bottom: 10px;
         margin-top: 10px;
+        height: 200px;
     }
     .detail {
         flex: 1;
-        padding: 10px;
-        border: 1px solid #EEE;
-        border-radius: 5px;
-        box-shadow: 0px 3px 5px -2px rgba(0,0,0,0.42);
-        -webkit-box-shadow: 0px 3px 5px -2px rgba(0,0,0,0.42);
-        -moz-box-shadow: 0px 3px 5px -2px rgba(0,0,0,0.42);
         margin-right: 10px;
+    }
+
+    .detail textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        border-radius: 5px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0px 3px 5px -2px rgba(0,0,0,0.42);
     }
     .detail-button-box {
         display: flex;
         flex-direction: column;
-        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .detail-button-box button {
+        margin-bottom: 10px;
+    }
+
+    .detail-image-box {
+        width: 300px;
+        margin-right: 20px;
     }
 </style>
