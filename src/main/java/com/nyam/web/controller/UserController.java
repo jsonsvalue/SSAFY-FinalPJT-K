@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,23 +70,24 @@ public class UserController {
 	// 로그인하면서 DB에 있는 사용자인지 확인하고, 
 	// DB에 존재한다면 session에 loginUser를 설정해준다.
 	@PostMapping("/login")
-	public ResponseEntity<?> postLogin(HttpSession session, User user){
+	public ResponseEntity<?> postLogin(HttpSession session, @RequestBody User user){
 		
 		User loginUser = userService.doLogin(user);
 		
-		System.out.println(loginUser);
+		// System.out.println(loginUser);
 		
 		if(loginUser != null) {	
 			session.setAttribute("loginUser", loginUser);
-			return ResponseEntity.ok().body("Login Successful");
+			return new ResponseEntity<User>(loginUser, HttpStatus.OK);
 		}else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid User");
 		}
 	}
 	
 	// 회원 가입을 하고, session에 해당 User에 대한 정보를 설정한다.
+	// Axios로 json형태로 보낼 경우, RequestBody를 써야한다.
 	@PostMapping("/regist")
-	public ResponseEntity<?> postRegist(HttpSession session, User newUser){
+	public ResponseEntity<?> postRegist(HttpSession session, @RequestBody User newUser){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
 		// 이미 로그인 했다면, 해당되는 sessUser를 반환한다.

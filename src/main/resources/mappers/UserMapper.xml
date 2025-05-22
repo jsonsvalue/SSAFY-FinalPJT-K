@@ -23,16 +23,14 @@
 			user_id,
 			name,
 			email,
-			password,
-			role
+			password
 		)
 		
 		VALUES (
 			#{userId},
 			#{name},
 			#{email},
-			#{password},
-			#{role}
+			#{password}
 		)
 		;
 	</insert>
