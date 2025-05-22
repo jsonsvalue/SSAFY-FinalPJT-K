@@ -21,11 +21,11 @@ const router = createRouter({
           name: 'feed',
           component:ArticleFeedView
         },
-        {
-          // TODO 예시 컴포넌트. 대체 해야 함.
-          path: 'login',
-          component:ArticleFeedView
-        },
+        // {
+        //   // TODO 예시 컴포넌트. 대체 해야 함.
+        //   path: 'login',
+        //   component:ArticleFeedView
+        // },
       ]
     },
     {
