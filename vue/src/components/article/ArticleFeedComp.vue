@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="img-box">
-                <img src="../../assets/img/bob.jpg">
+                <img :src="article.imageUrl" alt="Article Image"/>
             </div>
             <div class="button-box">
                 <a class="fav" href="">
