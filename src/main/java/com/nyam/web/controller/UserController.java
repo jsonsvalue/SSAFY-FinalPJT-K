@@ -1,11 +1,11 @@
 package com.nyam.web.controller;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,12 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nyam.model.dto.User;
 import com.nyam.model.service.UserService;
 
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Refill;
 import jakarta.servlet.http.HttpSession;
 
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
+	
+	
+	
+	
 	
 	UserService userService;
 	
@@ -99,6 +105,7 @@ public class UserController {
 			boolean result = userService.registUser(newUser);
 			if( result ) {
 				session.setAttribute("loginUser", newUser);
+				System.out.println(newUser.getUserId());
 			}
 			return new ResponseEntity<User>(newUser, HttpStatus.OK);
 		}

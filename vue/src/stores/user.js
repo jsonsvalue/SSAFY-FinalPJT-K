@@ -30,6 +30,7 @@ export const useUserStore = defineStore("user", ()=>{
       const userData = JSON.stringify(response.data);
       sessionStorage.setItem("user", userData);
       
+      router.push("/");
     })
     // error가 났을 때의 코드를 처리한다.
     // 이메일 주소랑 사용자 아이디 동일할 때, 실행할 코드를 처리한다.
