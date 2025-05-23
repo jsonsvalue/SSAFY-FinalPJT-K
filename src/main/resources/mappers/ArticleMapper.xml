@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nyam.model.dao.ArticleDao">
+	<insert id="insertArticleMaster" parameterType="ArticleMaster" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO article_master (
+			user_id
+		  , type
+		  , image_id
+		  , content
+		  , ingredient
+		) values (
+			#{userId}
+		  , #{type}
+		  , #{imageId}
+		  , #{content}
+		  , #{ingredient}
+		)
+	</insert>
+	
+	<insert id="insertArticleDetail" parameterType="ArticleDetail" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO article_detail (
+			article_id
+		  , `order`
+		  , image_id
+		  , content
+		) values (
+			#{articleId}
+		  , #{order}
+		  , #{imageId}
+		  , #{content}
+		)
+	</insert>
+	
+	<select id="selectArticleMaster" resultType="ArticleMaster">
+		SELECT a.id
+		     , a.user_id
+		     , a.type
+		     , a.image_id
+		     , a.content
+		     , a.ingredient
+		     , i.org_file as image_url
+		  FROM article_master a
+		     , image i
+		 WHERE a.id = #{id}
+		   AND a.image_id = i.id
+		   AND a.use_yn = 'Y'
+	</select>
+	
+	<update id="updateArticleMaster" parameterType="ArticleMaster">
+		UPDATE article_master
+		   SET user_id     = #{userId}
+		     , image_id    = #{imageId}
+		     , content     = #{content}
+		     , ingredient  = #{ingredient}
+		     , mdfc_dttm   = now()
+		 WHERE id          = #{id}
+	</update>
+	
+	<update id="deleteArticleMaster" parameterType="int">
+		UPDATE article_master
+		   SET use_yn = 'N'
+		 WHERE id = #{id}
+	</update>
+	
+	<select id="selectArticleDetail" parameterType="int">
+		SELECT a.id
+		     , a.article_id
+		     , a.order
+		     , a.image_id
+		     , a.content
+		     , i.org_file as image_url
+		  FROM article_detail a
+		     , image i
+		 WHERE a.article_id = #{id}
+		   AND a.use_yn = 'Y'
+		   AND a.image_id = i.id
+	</select>
+</mapper>
