@@ -1,6 +1,5 @@
 package com.nyam.web.controller;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nyam.model.dto.User;
 import com.nyam.model.service.UserService;
 
-import io.github.bucket4j.Bandwidth;
-import io.github.bucket4j.Refill;
 import jakarta.servlet.http.HttpSession;
 
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
-	
-	
-	
-	
-	
+		
 	UserService userService;
 	
 	@Autowired
@@ -129,7 +122,7 @@ public class UserController {
 	
 	// 로그인된 사용자의 session을 가져와서, 
 	// 해당되는 user의 회원 정보를 삭제한다.
-	@DeleteMapping("/delete")
+	@PatchMapping("/delete")
 	public ResponseEntity<?> deleteUser(HttpSession session, User user){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
