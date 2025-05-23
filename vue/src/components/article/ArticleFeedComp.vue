@@ -92,12 +92,14 @@
 
     .img-box {
         width: 100%;
+        height: 400px;
+        background-color: #DDD;
+        border-radius: 15px;
     }
 
     .img-box img {
-        max-width: 100%;
-        min-width: 200px;
-        max-height: 500px;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
         border-radius: 15px;
     }

@@ -4,7 +4,6 @@
         <template v-for="article in articleList"  :key="article.id">
             <ArticleFeedComp :article="article"></ArticleFeedComp>
         </template>
-        <ArticleFeedComp></ArticleFeedComp>
         
     </div>
 </template>
@@ -13,15 +12,15 @@
     import ArticleFeedComp from '@/components/article/ArticleFeedComp.vue'
 
     import axios from 'axios';
-    import { ref,onBeforeMount } from 'vue';
+    import { ref,onBeforeMount, onMounted } from 'vue';
     const articleList = ref([]);
     const url = import.meta.env.VITE_API_URL;
     const imageUrl = import.meta.env.VITE_IMAGE_URL;
-    onBeforeMount(async () => {
+    onMounted(async () => {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + '/feed');
             response.data.forEach((article) => {
-                article.imageUrl = imageUrl + article.imageId;
+                article.imageUrl = imageUrl + article.imageUrl;
             });
             articleList.value = response.data;
         } catch (error) {
