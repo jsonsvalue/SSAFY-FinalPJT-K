@@ -1,65 +1,65 @@
 <template>
-    <div class="uploader-box" @drop="dropEvent" @dragover.prevent>
+    <div ref = "box" class="uploader-box" @drop="dropEvent" @dragover.prevent>
         <input ref="input" type="file" accept="image/*" @change="uploadEvent" style="display: none;">
         <div v-show="isEmpty" class="empty-box" @click="openDialog" >
             <img src="../../assets/icon/download.svg" alt="upload image" style="height: 70px;width: 70px;">
             <p>Drag & Drop Image</p>
         </div>
         <div v-show="!isEmpty" class="image-box">
-            <img ref="image" :src="url" alt="Uploaded Image">
+            <img ref="image" alt="Uploaded Image" :src="image.imageUrl" />
             <button @click="removeImage">이미지삭제</button>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref,defineProps,defineExpose } from 'vue';
+    import { ref,onMounted } from 'vue';
+    import axios from 'axios'
+    
+    /* DOM */
     const input = ref(null)
-    const image = ref(null)
-    const file = ref(null)
+    const box = ref(null)
+
+    /* 사용자 정의 변수 */
     const isEmpty = ref(true)
-    defineExpose({
-        getFile: () => {
-            return file.value
-        },
-        isEdited: () => {
-            return isEdited
-        }
-    })
-    let isEdited = false
-    let url = ref(null)
-    const props = defineProps({
-        imageUrl: {
-            type: String,
-            default: null
-        }
-    })
+    const uploadUrl = import.meta.env.VITE_API_URL + '/upload'
+
+    const resourceUrl = import.meta.env.VITE_IMAGE_URL
+    
+    /* 사용자 정의 함수 */
     const removeImage = () => {
-        if (url.value) {
-            URL.revokeObjectURL(url.value)
-        }
-        file.value = null
-        url.value = null
+        props.image.imageUrl = null
+        props.image.imageId = null
         isEmpty.value = true
+        input.value.value = ""
+        emits('onFileUpload', null)
     }
-    const uploadEvent = (event) => {
-        const selectedFile = input.value.files[0]
-        if (selectedFile) {
-            upload(selectedFile)
-        }
-    }
+    
     const upload = newFile => {
-        isEdited = true
-        if (url.value) {
-            URL.revokeObjectURL(url.value)
-        }
-        if (newFile) {
-            file.value = newFile
-            url.value = URL.createObjectURL(newFile)
-            image.value.src = url
+        axios.post(uploadUrl, {file:newFile}, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        .then(res => {
             isEmpty.value = false
-        }
+            props.image.imageUrl = resourceUrl + res.data.orgFile
+            props.image.imageId = res.data.id
+            emits('onFileUpload',res.data.id,resourceUrl + res.data.orgFile)
+        })
+        .catch(err => {
+            console.error(err);
+            removeImage()
+        })
     }
+
+    
+    
+    const openDialog = () => {
+        input.value.click()
+    }
+
+    /* 이벤트 리스너 */
     const dropEvent = (event) => {
         event.preventDefault()
         const droppedFiles = event.dataTransfer.files
@@ -68,14 +68,32 @@
             upload(selectedFile)
         }
     }
-    const openDialog = () => {
-        input.value.click()
-    }
 
-    if (props.imageUrl) {
-        url.value = props.imageUrl
-        isEmpty.value = false
+    const uploadEvent = (event) => {
+        const selectedFile = input.value.files[0]
+        if (selectedFile) {
+            upload(selectedFile)
+        }
     }
+    
+    /* 컴포넌트 정의 */
+    const emits = defineEmits(['onFileUpload'])
+    const props = defineProps({
+        image: {
+            type: Object,
+            required: false,
+            default: {
+                imageId: null,
+                imageUrl: null
+            }
+        }
+    })
+
+    onMounted(() => {
+        if (box.value.offsetWidth <= 300) {
+            box.value.classList.add('small-box')
+        }
+    })
 </script>
 
 <style scoped>
@@ -131,5 +149,9 @@
         position: absolute;
         top: 10px;
         right: 10px;
+    }
+
+    .small-box p {
+        display: none;
     }
 </style>
