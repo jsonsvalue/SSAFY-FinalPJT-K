@@ -17,10 +17,10 @@ public class RateLimitInterceptor implements HandlerInterceptor{
 	
 	public RateLimitInterceptor() {
 		// 특정 시간 마다 특정 개수의 Token으로 Bucket을 채운다.
-		Refill refill = Refill.intervally(300, Duration.ofMinutes(1));
+		Refill refill = Refill.intervally(3000, Duration.ofMinutes(1));
 		
 		// 특정 시간 마다의 Token 개수 제한을 건다.
-		Bandwidth limit = Bandwidth.classic(300, refill);
+		Bandwidth limit = Bandwidth.classic(3000, refill);
 		
 		this.bucket = Bucket.builder()
 				.addLimit(limit)

@@ -1,9 +1,6 @@
-package com.nyam.model.VO;
+package com.nyam.model.dto;
 
 import java.util.List;
-
-import com.nyam.model.dto.ArticleDetail;
-import com.nyam.model.dto.ArticleMaster;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleVO {
+public class ArticleWrap {
 	private ArticleMaster article;
 	private List<ArticleDetail> subArticle;
 }

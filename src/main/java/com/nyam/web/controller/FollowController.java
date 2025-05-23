@@ -18,7 +18,6 @@ import com.nyam.model.service.FollowService;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin("*")
 public class FollowController {
 	
 	FollowService followService;

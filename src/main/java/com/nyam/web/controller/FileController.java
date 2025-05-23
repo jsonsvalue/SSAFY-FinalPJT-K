@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
 public class FileController {
 	
 	@Autowired
