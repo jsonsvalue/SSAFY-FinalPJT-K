@@ -18,7 +18,7 @@
       
       <div class="write-form">
         <BInputGroup class="mb-3 content">
-          <BFormInput v-model="emailOrPhone" placeholder="이메일 주소" />
+          <BFormInput v-model="email" placeholder="이메일 주소" />
         </BInputGroup>
         
         <BInputGroup class="mb-3 content">
@@ -26,7 +26,7 @@
         </BInputGroup>
         
         <BInputGroup class="mb-3 content">
-          <BFormInput v-model="username" placeholder="사용자 아이디" />
+          <BFormInput v-model="userId" placeholder="사용자 아이디" />
         </BInputGroup>
         
         <BInputGroup class="mb-3 content">
@@ -58,15 +58,18 @@
 
     const email = ref('');
     const name = ref('');
-    const username = ref('');
+    const userId = ref('');
     const password = ref('');
 
+    // store에 있는 함수를 쓴다.
+    const store = useUserStore();
+
     const signup = function(){
-        
-    //   console.log('Signing up with:', {
+        store.userRegister(userId.value, password.value, email.value, name.value);
+    //   console.log('Checking input:', {
     //     email: email.value,
     //     name: name.value,
-    //     username: username.value,
+    //     userId: userId.value,
     //     password: password.value
     //   });
     };

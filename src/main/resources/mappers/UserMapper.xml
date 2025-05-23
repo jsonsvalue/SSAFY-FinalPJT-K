@@ -6,14 +6,14 @@
 	<select id="selectByuserId" parameterType = "String">
 		SELECT *
 		FROM user
-		WHERE user_id = #{userId}
+		WHERE user_id = #{userId} AND use_yn = 'Y'
 		;
 	</select>
 	
 	<select id = "selectById" parameterType = "int">
 		SELECT *
 		FROM user
-		WHERE id = #{id}
+		WHERE id = #{id} AND use_yn = 'Y'
 		;
 	</select>
 	
@@ -23,16 +23,14 @@
 			user_id,
 			name,
 			email,
-			password,
-			role
+			password
 		)
 		
 		VALUES (
 			#{userId},
 			#{name},
 			#{email},
-			#{password},
-			#{role}
+			#{password}
 		)
 		;
 	</insert>
@@ -48,23 +46,24 @@
 			intro = #{intro},
 			feed_type = #{feedType},
 			mdfc_dttm = now()
+		WHERE user_id = #{userId} AND use_yn = 'Y'
+		;
+	</update>
+	
+	<!-- Soft Delete로 User 기록은 남겨준다. -->
+	<update id = "delete" parameterType = "String">
+		UPDATE user
+		SET
+			use_yn = 'N'
 		WHERE user_id = #{userId}
 		;
 	</update>
 	
 	
-	<delete id = "delete" parameterType = "String">
-		DELETE
-		FROM user
-		WHERE user_id = #{userId}
-		;
-	</delete>
-	
-	
 	<select id = "search" parameterType = "String">
 		SELECT *
 		FROM user
-		WHERE user_id LIKE CONCAT( #{keyword}, '%')
+		WHERE user_id LIKE CONCAT( #{keyword}, '%') AND use_yn = 'Y'
 		;
 		
 	</select>
