@@ -1,10 +1,8 @@
 <template>
     <div>
-        <h2>Feed View vue</h2>
         <template v-for="article in articleList"  :key="article.id">
             <ArticleFeedComp :article="article"></ArticleFeedComp>
         </template>
-        
     </div>
 </template>
 

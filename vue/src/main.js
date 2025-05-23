@@ -5,8 +5,9 @@ import {createPinia} from 'pinia'
 import { createApp } from 'vue'
 import { createBootstrap } from 'bootstrap-vue-next'
 
-import './assets/main.css'
+import './assets/custom.css'
 import './assets/style.css'
+import './assets/main.css'
 
 const pinia = createPinia()
 const app = createApp(App)

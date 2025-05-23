@@ -6,7 +6,7 @@ import LoginView from '@/views/user/LoginView.vue'
 import RegistView from '@/views/user/RegistView.vue'
 import ArticleWriteNyamView from '@/views/article/ArticleWriteNyamView.vue'
 import ArticleWriteRecipeView from '@/views/article/ArticleWriteRecipeView.vue'
-
+import ArticleMasterView from '@/views/article/ArticleMasterView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +27,11 @@ const router = createRouter({
         //   component:ArticleFeedView
         // },
       ]
+    },
+    {
+      path: '/article/:id',
+      name: 'ArticleMaster',
+      component: ArticleMasterView,
     },
     {
       path: '/write/nyam',

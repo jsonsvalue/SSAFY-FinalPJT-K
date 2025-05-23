@@ -1,0 +1,22 @@
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
+
+:root {
+  --bs-primary: #529e0a;
+  --bs-secondary: #eb9619;
+  --bs-success: #0e551b;
+  --bs-info: #0dcaf0;
+  --bs-warning: #c4451a;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #212529;
+  --bs-primary-rgb: 82,158,10;
+  --bs-secondary-rgb: 235,150,25;
+  --bs-success-rgb: 14,85,27;
+  --bs-info-rgb: 13, 202, 240;
+  --bs-warning-rgb: 196,69,26;
+  --bs-danger-rgb: 220, 53, 69;
+  --bs-light-rgb: 248, 249, 250;
+  --bs-dark-rgb: 33, 37, 41;
+  --bs-btn-bg: #529e0a;
+  --bs-btn-bg-rgb: 82,158,10;
+}
