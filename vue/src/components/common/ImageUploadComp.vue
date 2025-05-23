@@ -6,7 +6,7 @@
             <p>Drag & Drop Image</p>
         </div>
         <div v-show="!isEmpty" class="image-box">
-            <img ref="image" :src="url" alt="Uploaded Image">
+            <img ref="image" alt="Uploaded Image" :src="image.imageUrl" />
             <button @click="removeImage">이미지삭제</button>
         </div>
     </div>
@@ -18,20 +18,21 @@
     
     /* DOM */
     const input = ref(null)
-    const image = ref(null)
     const box = ref(null)
 
     /* 사용자 정의 변수 */
     const isEmpty = ref(true)
-    const url = ref(null)
     const uploadUrl = import.meta.env.VITE_API_URL + '/upload'
 
-    const resourcePath = import.meta.env.VITE_RESOURCE_PATH
+    const resourceUrl = import.meta.env.VITE_IMAGE_URL
     
     /* 사용자 정의 함수 */
     const removeImage = () => {
-        url.value = null
+        props.image.imageUrl = null
+        props.image.imageId = null
         isEmpty.value = true
+        input.value.value = ""
+        emits('onFileUpload', null)
     }
     
     const upload = newFile => {
@@ -41,12 +42,18 @@
             }
         })
         .then(res => {
-            console.log(res)
+            isEmpty.value = false
+            props.image.imageUrl = resourceUrl + res.data.orgFile
+            props.image.imageId = res.data.id
+            emits('onFileUpload',res.data.id,resourceUrl + res.data.orgFile)
         })
         .catch(err => {
-            console.error(err); 
+            console.error(err);
+            removeImage()
         })
     }
+
+    
     
     const openDialog = () => {
         input.value.click()
@@ -70,30 +77,21 @@
     }
     
     /* 컴포넌트 정의 */
-    const emits = defineEmits(['onFileUpload','onFileRemove'])
+    const emits = defineEmits(['onFileUpload'])
     const props = defineProps({
         image: {
             type: Object,
-            required: false
-        }
-    })
-
-    defineExpose({
-        getFile: () => {
-            return file.value
-        },
-        isEdited: () => {
-            return isEdited
+            required: false,
+            default: {
+                imageId: null,
+                imageUrl: null
+            }
         }
     })
 
     onMounted(() => {
         if (box.value.offsetWidth <= 300) {
             box.value.classList.add('small-box')
-        }
-        if (props.image) {
-            url.value = props.image
-            isEmpty.value = false
         }
     })
 </script>

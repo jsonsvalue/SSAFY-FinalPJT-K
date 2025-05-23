@@ -11,16 +11,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleMaster {
 	private int id;
-	@NonNull
 	private String userId;
-	@NonNull
 	private String type;
-	@NonNull
 	private int imageId;
 	private String imageUrl;
 	private String content;

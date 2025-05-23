@@ -2,6 +2,8 @@ package com.nyam.model.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -30,10 +32,9 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public FileDto uploadFile(MultipartFile file) throws SQLException, IOException {
 		String filename = UUID.randomUUID()+".png";
-		File f = new File(path+filename);
-		f.mkdirs();
+		Path path = Paths.get("./src/main/resources/static/image");
+		File f = new File(path.toAbsolutePath().toString()+"/"+filename);
 		file.transferTo(f);
-		
 		FileDto dto = new FileDto(0, filename,null,null,null);
 		
 		int res = dao.insertFile(dto);

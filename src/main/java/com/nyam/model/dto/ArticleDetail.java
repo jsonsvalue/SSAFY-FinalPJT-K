@@ -3,7 +3,6 @@ package com.nyam.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,11 +14,9 @@ import lombok.ToString;
 public class ArticleDetail {
 	private int id;
 	private int articleId;
-	@NonNull
 	private int order;
-	@NonNull
 	private int imageId;
-	private int imageUrl;
+	private String imageUrl;
 	private String content;
 	private String useYN;
 	private String rgstDttm;

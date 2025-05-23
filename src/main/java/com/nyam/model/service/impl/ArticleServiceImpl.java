@@ -1,10 +1,12 @@
 package com.nyam.model.service.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nyam.model.VO.ArticleVO;
 import com.nyam.model.dao.ArticleDao;
 import com.nyam.model.dto.ArticleDetail;
 import com.nyam.model.dto.ArticleMaster;
@@ -17,13 +19,33 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ArticleServiceImpl implements ArticleService{
 	
 	@Autowired
-	ArticleDao articleDao;
+	ArticleDao dao;
 
 	@Override
-	public int writeArticle(HttpServletRequest request, HttpServletResponse response, ArticleMaster master,
-			List<ArticleDetail> detailList) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int writeArticle(HttpServletRequest request, HttpServletResponse response, ArticleVO article) throws SQLException {
+		
+		int res = dao.insertArticleMaster(article.getArticle());
+		int id = article.getArticle().getId();
+		if (res!=0&&id!=0) {
+			for (ArticleDetail sub : article.getSubArticle()) {
+				sub.setArticleId(id);
+				dao.insertArticleDetail(sub);
+			}
+		} else {
+			throw new SQLException();
+		}
+		return id;
 	}
+
+	@Override
+	public ArticleVO selectArticle(HttpServletRequest request, HttpServletResponse response, int id)
+			throws SQLException {
+		ArticleMaster article = dao.selectArticleMaster(id);
+		if (article==null) throw new SQLException();
+		List<ArticleDetail> subArticle = dao.selectArticleDetail(article.getId());
+		ArticleVO vo = new ArticleVO(article,subArticle);
+		return vo;
+	}
+	
 	
 }

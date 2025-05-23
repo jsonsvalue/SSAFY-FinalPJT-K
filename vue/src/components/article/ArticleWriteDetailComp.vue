@@ -1,7 +1,7 @@
 <template>
     <div class="detail-box">
         <div class="detail-image-box">
-            <ImageUploadComp :image="subArticle.image"/>
+            <ImageUploadComp :image=subArticle @on-file-upload="onFileUpload"/>
         </div>
         <div class="detail">
             <textarea class="form-control" v-model="props.subArticle.content" rows="5"></textarea>
@@ -16,7 +16,7 @@
 
 <script setup>
     import { BFormInput, BButton,BInputGroup,BFormText,BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
-    import { ref,defineProps } from 'vue';
+    import { ref } from 'vue';
     import ImageUploadComp from '@/components/common/ImageUploadComp.vue';
 
     const props = defineProps({
@@ -24,26 +24,34 @@
             type: Object,
             required: true,
             default: {
+                id:null,
+                article_id:null,
                 content: '',
-                image: null
+                imageId: null,
+                order: null,
+                imageUrl: null
             }
         }
     });
 
-    const submitArticle = () => {
-        console.log('Content:', content.value);
+    /* 사용자 정의 함수 */
+    const onFileUpload = (fileId) => {
+        props.subArticle.imageId = fileId;
     }
 
     const deleteDetail = () => {
-        console.log('Delete detail');
+        emits('onDelete', props.subArticle.order);
     }
 
     const moveUp = () => {
-        console.log('Move up');
+        emits('onMoveUp', props.subArticle.order);
     }
     const moveDown = () => {
-        console.log('Move down');
+        emits('onMoveDown', props.subArticle.order);
     }
+    /* 컴포넌트 정의 */
+    const emits = defineEmits(['onDelete', 'onMoveUp', 'onMoveDown']);
+
 </script>
 
 <style scoped>
