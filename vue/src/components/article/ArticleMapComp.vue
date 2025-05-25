@@ -44,9 +44,10 @@
 
 
 <script setup>
+  import { useKakao } from 'vue3-kakao-maps/@utils'; 
   import {ref} from 'vue';
   import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
-  
+    // 기본 keyword를 설정한다.
     const keyword = ref("역삼역 맛집");
     //라이브러리 사용 방법을 반드시 참고하여 주시기 바랍니다.
     const map = ref();
@@ -152,6 +153,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  height:60vh;
 }
 
 .title {
@@ -165,6 +167,8 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 10px;
+  padding: 30px 0 15px 0;
+  flex: 0 0 auto;
 }
 
 .search-bar input {
@@ -192,12 +196,12 @@
   display: flex;
   width: 100%;
   max-width: 1100px;
-  /* gap 제거해서 지도와 리스트 붙이기 */
+  flex: 1 1 auto;
 }
 
 .sidebar {
   width: 280px;
-  max-height: 70vh;
+  height: 100%;
   overflow-y: auto;
   background: #f9f9f9;
   padding: 10px;
@@ -208,17 +212,20 @@
 
 .map-wrapper {
   flex: 1;
-  height: 70vh;
+  height: 100%;
   /* 왼쪽 라운드 제거 */
   border-radius: 0 8px 8px 0;
   overflow: hidden;
 }
 
 .sidebar li {
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
-  cursor: pointer; /* ✅ 마우스 모양 변경 */
-  transition: background-color 0.2s;
+    list-style:none;
+    padding:0;
+    margin:0; 
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer; /* ✅ 마우스 모양 변경 */
+    transition: background-color 0.2s;
 }
 
 .sidebar li:hover {

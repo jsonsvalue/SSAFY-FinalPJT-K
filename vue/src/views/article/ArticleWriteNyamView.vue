@@ -19,12 +19,13 @@
             <div class="addSub">
                 <BButton variant="outline-primary" @click="addSubArticle">추가</BButton>
             </div>
+            
+            <ArticleMapComp></ArticleMapComp>
+
             <div class="button-box">
                 <BButton variant="primary" @click="submitArticle">작성하기</BButton>
                 <BButton variant="secondary" @click="$router.push('/article')">취소</BButton>
             </div>
-            
-            <ArticleMapComp></ArticleMapComp>
         </div>
     </div>
 </template>
