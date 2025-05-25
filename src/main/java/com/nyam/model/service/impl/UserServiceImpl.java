@@ -3,6 +3,7 @@ package com.nyam.model.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,13 +54,16 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
-
+	// 로그인만 된 상태에서 다른 유저의 정보를 지우는 것을 막기 위해, 
+	// modUser 그리고 session의 사용자가 같은지 반드시 확인해줘야 한다.
 	@Override
-	public void deleteUser(HttpSession session) {
+	public void deleteUser(User sessUser, User delUser) {
+		
+		if(!delUser.getUserId().equals(sessUser.getUserId())) {
+			throw new AccessDeniedException("Failed to delete user");
+		}
 		// session을 통해서 user 정보를 갖고와서,
 		// 해당되는 user를 지운다.
-		User sessUser = (User)session.getAttribute("loginUser");
-		
 		if(sessUser != null) {
 			userDao.delete(sessUser.getUserId());
 		}
@@ -67,8 +71,14 @@ public class UserServiceImpl implements UserService{
 		
 	}
 	
+	// 로그인만 된 상태에서 다른 유저의 정보를 수정하는 것을 막기 위해, 
+	// modUser 그리고 session의 사용자가 같은지 반드시 확인해줘야 한다.
 	@Override
-	public boolean updateUser(User modUser) {
+	public boolean updateUser(User sessUser, User modUser) {
+		
+		if(!modUser.getUserId().equals(sessUser.getUserId())) {
+			throw new AccessDeniedException("Failed to update user's information");
+		}
 		// 정보가 수정된 modUser의 정보를, 
 		// DB에 반영하여 업데이트 한다.
 		int	result = userDao.update(modUser);
@@ -84,7 +94,12 @@ public class UserServiceImpl implements UserService{
 		
 		return searchedUsers;
 	}
-	
+
+	@Override
+	public User searchExactUser(String userId) {
+		User profileUser = userDao.searchExact(userId);
+		return profileUser;
+	}	
 	
 	
 }

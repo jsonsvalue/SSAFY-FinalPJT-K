@@ -52,6 +52,21 @@ public class ArticleServiceImpl implements ArticleService{
 			throws SQLException {
 		return dao.selectArticleMasterAll();
 	}
+
+	@Override
+	public List<ArticleMaster> selectArticleByUser(HttpServletRequest request, HttpServletResponse response, String userId)
+			throws SQLException {
+		// Article Master를 userId로 찾되,
+		List<ArticleMaster> masterArticle = dao.selectArticleMasterByUser(userId);
+		if(masterArticle == null) 
+			throw new SQLException();
+		// 어차피 subArticle은 masterArticle의 id를 갖고 있기 때문에 getId로 해서 묶어야 한다.
+		// List<ArticleDetail> subArticle = dao.selectArticleDetail(masterArticle.getId());
+		// ArticleWrap VO = new ArticleWrap(masterArticle, subArticle);
+		
+		return masterArticle;
+
+	}
 	
 	
 }

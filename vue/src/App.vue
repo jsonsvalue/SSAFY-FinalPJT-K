@@ -28,7 +28,7 @@
       const response = await axios.get(`${REST_API_URL}/getUserInfo`,{
         withCredentials : true
       });
-      console.log(response.data);
+      console.log("App.vue", response.data);
       
       router.push('');
     }catch(error){

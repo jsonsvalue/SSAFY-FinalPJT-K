@@ -17,7 +17,7 @@ import com.nyam.model.dto.Follow;
 import com.nyam.model.service.FollowService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 public class FollowController {
 	
 	FollowService followService;
@@ -26,11 +26,12 @@ public class FollowController {
 	public FollowController(FollowService followService) {
 		this.followService = followService;
 	}
-	
-	@GetMapping("/test")
-	public String test() {
-		return "follow/hello";
-	}
+	/*
+		@GetMapping("/follow/test")
+		public String test() {
+			return "follow/hello";
+		}
+	*/
 	
 	// Path에 있는 userId와 requestParam에 있는 followId를 이용해서,
 	// follow DB에 데이터를 저장한다.
@@ -57,7 +58,7 @@ public class FollowController {
 			
 	}
 	
-	@GetMapping("/follow/getFollowers/{userId}")
+	@GetMapping("/follow/getFollower/{userId}")
 	public ResponseEntity<?> getFollowers(@PathVariable("userId") String userId){
 		List<Follow> followerList = followService.getFollowersList(userId);
 		

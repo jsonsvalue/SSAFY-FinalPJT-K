@@ -23,11 +23,14 @@
                 <BButton variant="primary" @click="submitArticle">작성하기</BButton>
                 <BButton variant="secondary" @click="$router.push('/article')">취소</BButton>
             </div>
+            
+            <ArticleMapComp></ArticleMapComp>
         </div>
     </div>
 </template>
 
 <script setup>
+    import ArticleMapComp from '@/components/article/ArticleMapComp.vue';
     import { BFormInput, BButton,BInputGroup,BFormText,BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
     import { ref, watch } from 'vue';
     import ImageUploadComp from '@/components/common/ImageUploadComp.vue';

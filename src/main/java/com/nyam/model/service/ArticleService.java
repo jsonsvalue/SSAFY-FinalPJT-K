@@ -16,4 +16,6 @@ public interface ArticleService {
 	ArticleWrap selectArticle(HttpServletRequest request, HttpServletResponse response, int id) throws SQLException;
 	
 	List<ArticleMaster> getAllArticle(HttpServletRequest request, HttpServletResponse response) throws SQLException;
+	
+	List<ArticleMaster> selectArticleByUser(HttpServletRequest request, HttpServletResponse response, String userId) throws SQLException;
 }

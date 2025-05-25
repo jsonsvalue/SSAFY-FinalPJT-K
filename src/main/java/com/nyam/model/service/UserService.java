@@ -12,10 +12,12 @@ public interface UserService {
 	
 	boolean registUser(User user);
 	
-	boolean updateUser(User user);
+	boolean updateUser(User sessUser, User moduser);
 	
-	void deleteUser(HttpSession session);
+	void deleteUser(User sessUser, User delUser);
 	
 	List<User> searchUser(String userId);
+	
+	User searchExactUser(String userId);
 	
 }

@@ -23,4 +23,7 @@ public interface ArticleDao {
 	int deleteArticleDetail(int articleId);
 	
 	List<ArticleDetail> selectArticleDetail(int articleId);
+	
+	List<ArticleMaster> selectArticleMasterByUser(String userId);
+	
 }

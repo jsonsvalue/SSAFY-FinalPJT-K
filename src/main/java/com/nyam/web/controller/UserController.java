@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,39 +124,54 @@ public class UserController {
 	// 로그인된 사용자의 session을 가져와서, 
 	// 해당되는 user의 회원 정보를 삭제한다.
 	@PatchMapping("/delete")
-	public ResponseEntity<?> deleteUser(HttpSession session, User user){
+	public ResponseEntity<?> deleteUser(HttpSession session, @RequestBody User delUser){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
-		if(sessUser != null) {
-			userService.deleteUser(session);
-			session.removeAttribute("loginUser");
-			return ResponseEntity.status(HttpStatus.OK).body("User Deleted Successfully");
-			
-		}else
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed to delete user");
-		
+		try{
+			if(sessUser != null) {
+				userService.deleteUser(sessUser, delUser);
+				session.removeAttribute("loginUser");
+				return ResponseEntity.status(HttpStatus.OK).body("User Deleted Successfully");
+				
+			}else
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+			}
+		catch(AccessDeniedException err) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err.getMessage());
+		}
 	}
 	
-	
+	// 사용자 정보를 업데이트하고 session에 반영할 때는 반드시 modUser를 반영하는 것이 아니라,
+	// DB에서 바뀐 값을 session에 반영해주는 것이 중요하다.
 	@PatchMapping("/update")
-	public ResponseEntity<?> updateUser(HttpSession session, User modUser){
+	public ResponseEntity<?> updateUser(HttpSession session, @RequestBody User modUser){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
 		if(sessUser != null) {
 			
-			// 업데이트된 정보를 modUser에 반영하고,
-			// DB에 업데이트한다.
-			// modUser.setId(sessUser.getId());
-			boolean updated = userService.updateUser(modUser);
-			
-			// 업데이트된 정보를 Session에 반영해준다.
-			if(updated) {
-				session.setAttribute("loginUser", modUser);
+			try {
+				// 업데이트된 정보를 modUser에 반영하고,
+				// DB에 업데이트한다.
+				// modUser.setId(sessUser.getId());
+				boolean updated = userService.updateUser(sessUser, modUser);
 				
-				return ResponseEntity.status(HttpStatus.OK).body("User Information Updated Successfully");
-			}else {
-				
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update User information");
+				// 업데이트된 정보를 DB에서 조회한 후, Session에 반영해준다.
+				// modUser는 JSON 데이터로 받은 정보이기 때문에, DB에서 데이터를 조회하고 업데이트 해야 한다.
+				if(updated) {
+					
+					User updatedUser = userService.searchUser(modUser.getUserId()).get(0);
+					
+					session.setAttribute("loginUser", updatedUser);
+					
+					//return ResponseEntity.status(HttpStatus.OK).body("User Information Updated Successfully");
+					return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
+				}else {
+					
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update User information");
+				}
+			}
+			catch(AccessDeniedException err) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err.getMessage());
 			}
 			
 		}
@@ -164,8 +180,8 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Not logged in");
 	}
 	
-	@GetMapping("/find")
-	public ResponseEntity<?> findUser(@RequestParam("keyword")String keyword){
+	@GetMapping("/search")
+	public ResponseEntity<?> searchUser(@RequestParam("keyword")String keyword){
 		
 		//session이 없어도, 사용자 목록은 검색해서 확인할 수 있게는 한다.
 		List<User> searchedUsers = userService.searchUser(keyword);
@@ -173,5 +189,17 @@ public class UserController {
 		return new ResponseEntity<List<User>>(searchedUsers, HttpStatus.OK);
 	} 
 	
+	@GetMapping("/profile/{userId}")
+	public ResponseEntity<?> profileCheck(@PathVariable("userId") String userId){
+		User profileUser = userService.searchExactUser(userId);
+		
+		// 사용자가 DB에 존재한다면 반환하고, 그렇지 않으면 404를 보내준다.
+		if(profileUser != null) {
+			return new ResponseEntity<User>(profileUser, HttpStatus.OK);
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found");
+		}
+		
+	}
 	
 }
