@@ -2,6 +2,7 @@ package com.nyam.model.dao;
 
 import java.util.List;
 
+import com.nyam.model.dto.ArticleComment;
 import com.nyam.model.dto.ArticleDetail;
 import com.nyam.model.dto.ArticleMaster;
 
@@ -23,4 +24,8 @@ public interface ArticleDao {
 	int deleteArticleDetail(int articleId);
 	
 	List<ArticleDetail> selectArticleDetail(int articleId);
+	
+	int insertComment(ArticleComment comment);
+	
+	List<ArticleComment> selectComment(int articleId);
 }

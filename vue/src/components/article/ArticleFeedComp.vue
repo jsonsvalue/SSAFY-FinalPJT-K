@@ -23,7 +23,6 @@
                 </a>
                 <span>20</span>
                 <a href=""><img src="../../assets/icon/comment.svg"/></a>
-                <a onclick=""><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></a>
             </div>
         </div>
     </div>
@@ -63,71 +62,5 @@
         -moz-box-shadow: 0px 3px 5px -2px rgba(0,0,0,0.42);
         display: flex;
         flex-direction: column;
-    }
-
-    .profile {
-        display: flex;
-        margin-bottom: 20px;
-    }
-
-    .profile p {
-        margin-top: 2px;
-        margin-bottom: 2px;
-    }
-
-    .profile img {
-        border-radius: 50%;
-        width: 65px;
-        height: 65px;
-    }
-    .profile .name-box {
-        display: flex;
-        flex-direction: column;
-        margin-left: 15px;
-    }
-
-    .profile .name {
-        font-size: 1.3em;
-        font-weight: 700;
-    }
-    .profile .category {
-        font-size: 1.0em;
-        color: #AAA;
-    }
-
-    .img-box {
-        width: 100%;
-        height: 400px;
-        background-color: #DDD;
-        border-radius: 15px;
-    }
-
-    .img-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        border-radius: 15px;
-    }
-
-    .button-box {
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-    }
-
-    .button-box a {
-        cursor: pointer;
-    }
-
-    .button-box img {
-        height: 35px;
-        margin: 5px;
-    }
-
-    .button-box span {
-        font-size: 1.2em;
-        font-weight: 700;
-        margin-left: 3px;
-        margin-right: 7px;
     }
 </style>

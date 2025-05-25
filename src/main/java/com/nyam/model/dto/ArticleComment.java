@@ -5,15 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileDto {
+public class ArticleComment {
 	private int id;
-	private String orgFile;
+	private String userId;
+	private String articleId;
+	private String content;
 	private String useYN;
 	private String rgstDttm;
 	private String mdfcDttm;

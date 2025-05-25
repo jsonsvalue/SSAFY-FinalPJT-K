@@ -3,6 +3,7 @@ package com.nyam.model.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.nyam.model.dto.ArticleComment;
 import com.nyam.model.dto.ArticleMaster;
 import com.nyam.model.dto.ArticleWrap;
 
@@ -16,4 +17,6 @@ public interface ArticleService {
 	ArticleWrap selectArticle(HttpServletRequest request, HttpServletResponse response, int id) throws SQLException;
 	
 	List<ArticleMaster> getAllArticle(HttpServletRequest request, HttpServletResponse response) throws SQLException;
+	
+	int writeComment(HttpServletRequest request, HttpServletResponse response, ArticleComment comment) throws SQLException;
 }

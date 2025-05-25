@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nyam.model.dto.ArticleComment;
 import com.nyam.model.dto.ArticleMaster;
 import com.nyam.model.dto.ArticleWrap;
 import com.nyam.model.dto.User;
@@ -32,8 +32,8 @@ public class ArticleController {
 	@PostMapping("/article")
 	public ResponseEntity<?> writeArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response,@RequestBody ArticleWrap article) {
 		User user = (User)session.getAttribute("loginUser");
-//		if (user==null) return ResponseEntity.badRequest().build();
-		article.getArticle().setUserId("hell");
+		if (user==null) return ResponseEntity.badRequest().build();
+		article.getArticle().setUserId(user.getUserId());
 		try {
 			int id = service.writeArticle(request, response, article);
 			return ResponseEntity.ok(id);
@@ -59,6 +59,21 @@ public class ArticleController {
 		try {
 			List<ArticleMaster> list = service.getAllArticle(request, response);
 			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@PostMapping("/article/{id}/comment")
+	public ResponseEntity<?> postComment(HttpSession session, HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id,@RequestBody ArticleComment comment) {
+		User user = (User)session.getAttribute("loginUser");
+		if (user==null) return ResponseEntity.badRequest().build();
+		comment.setUserId(user.getUserId());
+		comment.setArticleId(id);
+		try {
+			int res = service.writeComment(request, response, comment);
+			return ResponseEntity.ok(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();

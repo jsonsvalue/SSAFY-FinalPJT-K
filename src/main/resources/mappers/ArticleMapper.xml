@@ -88,4 +88,30 @@
 		   AND a.use_yn = 'Y'
 		   AND a.image_id = i.id
 	</select>
+	
+	<insert id="insertComment" parameterType="ArticleComment" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO article_comment (
+			article_id
+		  , user_id
+		  , content
+		) VALUES (
+			#{articleId}
+		  , #{user_id}
+		  , #{content}
+		)
+	</insert>
+	
+	<delete id="deleteComment" parameterType="int">
+		UPDATE comment
+		   SET use_yn = 'N'
+		 WHERE id = #{id}
+	</delete>
+	
+	<select id="selectComment" parameterType="int">
+		SELECT *
+		  FROM article_comment
+		 WHERE article_id = #{articleId}
+		   AND use_yn = 'Y'
+		 ORDER BY rgst_dttm desc;
+	</select>
 </mapper>
