@@ -6,12 +6,10 @@
 </template>
 
 <script setup>
-  import HeaderComp from './components/HeaderComp.vue';
-  import SampleView from './views/SampleView.vue';
-  import {createRouter,createMemoryHistory} from 'vue-router'
-  import { onBeforeMount } from 'vue';
-  import router from './router'
   import axios from "axios";
+import { onBeforeMount } from 'vue';
+import HeaderComp from './components/HeaderComp.vue';
+import router from './router';
 
   const REST_API_URL = import.meta.env.VITE_API_URL;
 
