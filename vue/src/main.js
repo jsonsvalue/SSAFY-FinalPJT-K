@@ -4,7 +4,6 @@ import router from './router'
 import {createPinia} from 'pinia'
 import { createApp } from 'vue'
 import { createBootstrap } from 'bootstrap-vue-next'
-import ImageModal from './components/common/ImageModalComp.vue'
 
 import './assets/custom.css'
 import './assets/style.css'
@@ -21,5 +20,4 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.use(createBootstrap())
-app.component('imageModal',ImageModal)
 app.mount('#app')

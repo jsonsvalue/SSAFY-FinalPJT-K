@@ -9,7 +9,7 @@
                     <p class="category" v-else>레시피</p>
                 </div>
             </div>
-            <div class="img-box">
+            <div class="img-box" @click="openModal(article.imageUrl)">
                 <img :src="article.imageUrl" alt="Article Image"/>
             </div>
             <div class="content-box" v-if="article.content">
@@ -50,6 +50,7 @@
     import ArticleCommentComp from '@/components/article/ArticleCommentComp.vue';
     import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
     import { BToast,BInputGroup, BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
+    import { useImageStore } from '@/stores/image.js';
     const article = ref({});
     const subArticle = ref([]);
     const comment = ref([]);
@@ -58,11 +59,15 @@
     const router = useRouter();
     const route = useRoute();
     const articleId = route.params.id;
+    const image = useImageStore();
     const profile = () => {
         router.push({
             name: 'profile',
             params: { userId: article.value.userId }
         });
+    };
+    const openModal = (url) => {
+        image.openModal(url);
     };
     const toast = ref(null);
     onMounted(async () => {
@@ -225,5 +230,7 @@
         border-bottom-right-radius: 10px;
         overflow-y: auto;
     }
-    
+    .img-box {
+        cursor:pointer
+    }
 </style>   

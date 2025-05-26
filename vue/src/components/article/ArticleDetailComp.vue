@@ -1,6 +1,6 @@
 <template>
     <div class="detail-box">
-        <div class="detail-image-box">
+        <div class="detail-image-box" @click="openModal(sub.imageUrl)">
             <img :src="sub.imageUrl"/>
         </div>
         <div class="detail">
@@ -11,6 +11,11 @@
 
 <script setup>
     import { ref } from 'vue';
+    import { useImageStore } from '@/stores/image.js';
+    const image = useImageStore();
+    const openModal = (url) => {
+        image.openModal(url);
+    };
     const props = defineProps({
         sub: {
             type: Object,
@@ -77,5 +82,7 @@
     .detail textarea:focus {
         outline: none;
     }
-
+    .detail-image-box img {
+        cursor: pointer;
+    }
 </style>
