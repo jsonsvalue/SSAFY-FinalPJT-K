@@ -43,8 +43,9 @@ public class ArticleServiceImpl implements ArticleService{
 			throws SQLException {
 		ArticleMaster article = dao.selectArticleMaster(id);
 		if (article==null) throw new SQLException();
-		List<ArticleDetail> subArticle = dao.selectArticleDetail(article.getId());
-		ArticleWrap vo = new ArticleWrap(article,subArticle);
+		List<ArticleDetail> subArticle = dao.selectArticleDetail(id);
+		List<ArticleComment> comment = dao.selectComment(id);
+		ArticleWrap vo = new ArticleWrap(article,subArticle,comment);
 		return vo;
 	}
 	
@@ -65,6 +66,4 @@ public class ArticleServiceImpl implements ArticleService{
 			throw new SQLException();
 		}
 	}
-	
-	
 }

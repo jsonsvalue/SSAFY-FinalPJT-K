@@ -6,34 +6,53 @@
                     <img src="../../assets/img/DeepSleepCho.jpg" alt="프로필 이미지" class="profile-image">
                     <span class="profile-name">사용자 이름</span>
                 </div>
-                <textarea rows="5" class="comment-input" placeholder="댓글을 입력하세요..."></textarea>
-                <button class="btn btn-secondary">등록</button>
+                <textarea rows="5" class="comment-input" placeholder="댓글을 입력하세요..." @keypress:enter="handleCommentSubmit" v-model="comment.content"></textarea>
+                <button class="btn btn-secondary" @click="handleCommentSubmit">등록</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+    import router from '@/router';
+import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
     const comment = ref({
-        
+        userId:null,
+        content:'',
+        articleId: null
     });
+    const user = JSON.parse(sessionStorage.getItem("user"))
     const url = import.meta.env.VITE_API_URL + '/article';
     const handleCommentSubmit = () => {
-        if (comment.value.trim() === '') {
+        if (comment.value.content.trim() === '') {
             alert('댓글을 입력해주세요.');
             return;
         }
-        axios.post(url,params)
+        comment.value.userId = user.userId;
+        comment.value.articleId = props.articleId;
+
+        axios.post(`${url}/${props.articleId}/comment`,comment.value)
             .then(res => {
                 console.log(res.data);
                 comment.value = '';
+                router.go()
+                // router.push({ name: 'ArticleMaster', params: { id: props.articleId }})
             })
             .catch(err => {
                 console.error(err); 
             })
         
     };
+
+    const props = defineProps({
+        articleId: {
+            type: Number,
+            required: true
+        }
+    });
 </script>
 
 <style scoped>

@@ -33,7 +33,7 @@
                 <a onclick=""><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></a>
             </div>
         </div>
-        <ArticleCommentComp></ArticleCommentComp>
+        <ArticleCommentComp :article-id="Number(articleId)" :comment="comment"></ArticleCommentComp>
     </div>
 </template>
 
@@ -60,6 +60,7 @@
                 sub.imageUrl = imageUrl + sub.imageUrl;
             });
             subArticle.value = response.data.subArticle;
+            comment.value = response.data.comment;
         } catch (error) {
             console.error('Error fetching articles:', error);
             alert('유효하지 않은 접근입니다.');

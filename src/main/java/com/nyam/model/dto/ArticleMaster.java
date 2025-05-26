@@ -3,8 +3,6 @@ package com.nyam.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -21,6 +19,7 @@ public class ArticleMaster {
 	private String imageUrl;
 	private String content;
 	private String ingredient;
+	private int likeCount;
 	private String useYN;
 	private String rgstDttm;
 	private String mdfcDttm;

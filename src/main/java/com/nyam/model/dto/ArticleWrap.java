@@ -14,4 +14,5 @@ import lombok.Setter;
 public class ArticleWrap {
 	private ArticleMaster article;
 	private List<ArticleDetail> subArticle;
+	private List<ArticleComment> comment;
 }

@@ -96,7 +96,7 @@
 		  , content
 		) VALUES (
 			#{articleId}
-		  , #{user_id}
+		  , #{userId}
 		  , #{content}
 		)
 	</insert>
@@ -113,5 +113,75 @@
 		 WHERE article_id = #{articleId}
 		   AND use_yn = 'Y'
 		 ORDER BY rgst_dttm desc;
+	</select>
+	
+	<select id="selectArticleRecommend">
+		WITH current_interactions AS (
+		  -- 현재 사용자가 좋아요 또는 댓글로 상호작용한 게시물 목록
+		  SELECT article_id 
+		  FROM article_like 
+		  WHERE user_id = #{user_id} AND use_yn = 'Y'
+		  UNION
+		  SELECT article_id 
+		  FROM article_comment 
+		  WHERE user_id = #{user_id} AND use_yn = 'Y'
+		),
+		similar_users AS (
+		  -- 현재 사용자가 상호작용한 게시물에 대해, 다른 사용자들이 남긴 행동으로 유사 사용자 도출
+		  SELECT DISTINCT user_id
+		  FROM (
+		    SELECT user_id 
+		    FROM article_like 
+		    WHERE article_id IN (SELECT article_id FROM current_interactions)
+		      AND user_id != #{user_id}
+		      AND use_yn = 'Y'
+		    UNION
+		    SELECT user_id 
+		    FROM article_comment 
+		    WHERE article_id IN (SELECT article_id FROM current_interactions)
+		      AND user_id != #{user_id}
+		      AND use_yn = 'Y'
+		  ) AS sim
+		),
+		candidate_interactions AS (
+		  SELECT article_id, 1 AS weight
+		  FROM article_like
+		  WHERE user_id IN (SELECT user_id FROM similar_users)
+		    AND article_id NOT IN (SELECT article_id FROM current_interactions)
+		    AND use_yn = 'Y'
+		  UNION ALL
+		  SELECT article_id, 1 AS weight  -- 댓글의 경우 필요시 가중치를 다르게 줄 수 있음 (예: 2)
+		  FROM article_comment
+		  WHERE user_id IN (SELECT user_id FROM similar_users)
+		    AND article_id NOT IN (SELECT article_id FROM current_interactions)
+		    AND use_yn = 'Y'
+		),
+		candidate_result AS (
+		  SELECT am.*, SUM(ci.weight) AS score
+		  FROM candidate_interactions ci
+		  JOIN article_master am ON am.id = ci.article_id
+		  WHERE am.use_yn = 'Y' 
+		    AND am.id <![CDATA[<]]> #{top_id}
+		  GROUP BY ci.article_id
+		),
+		fallback_popular AS (
+		  SELECT am.*, (am.like_count + IFNULL(ac.comment_count, 0)) AS score
+		  FROM article_master am
+		  LEFT JOIN (
+		      SELECT article_id, COUNT(*) AS comment_count
+		      FROM article_comment
+		      WHERE use_yn = 'Y'
+		      GROUP BY article_id
+		  ) ac ON am.id = ac.article_id
+		  WHERE am.use_yn = 'Y'
+		    AND am.id <![CDATA[<]]> #{top_id}
+		  ORDER BY am.id DESC
+		  LIMIT 20
+		)
+		SELECT * FROM candidate_result
+		UNION ALL
+		SELECT * FROM fallback_popular
+		WHERE NOT EXISTS (SELECT 1 FROM candidate_result)
+		ORDER BY id DESC;
 	</select>
 </mapper>
