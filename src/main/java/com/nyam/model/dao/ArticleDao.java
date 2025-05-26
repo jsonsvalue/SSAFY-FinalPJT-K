@@ -2,6 +2,8 @@ package com.nyam.model.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.nyam.model.dto.ArticleComment;
 import com.nyam.model.dto.ArticleDetail;
 import com.nyam.model.dto.ArticleMaster;
@@ -13,9 +15,9 @@ public interface ArticleDao {
 	
 	int deleteArticleMaster(ArticleMaster master);
 	
-	ArticleMaster selectArticleMaster(int articleId);
+	ArticleMaster selectArticleMaster(@Param("articleId") int articleId,@Param("sessionId") String sessionId);
 	
-	List<ArticleMaster> selectArticleMasterAll();
+	List<ArticleMaster> selectArticleMasterAll(String sessionId);
 	
 	int insertArticleDetail(ArticleDetail detail);
 	
@@ -30,5 +32,12 @@ public interface ArticleDao {
 	int insertComment(ArticleComment comment);
 	
 	List<ArticleComment> selectComment(int articleId);
-
+	
+	int insertArticleLike(@Param("articleId")int articleId, @Param("sessionId")String sessionId);
+	
+	int deleteArticleLike(@Param("articleId")int articleId, @Param("sessionId")String sessionId);
+	
+	int incArticleLike(int articleId);
+	
+	int decArticleLike(int articleId);
 }

@@ -11,10 +11,12 @@ import com.nyam.model.dto.ArticleComment;
 import com.nyam.model.dto.ArticleDetail;
 import com.nyam.model.dto.ArticleMaster;
 import com.nyam.model.dto.ArticleWrap;
+import com.nyam.model.dto.User;
 import com.nyam.model.service.ArticleService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ArticleServiceImpl implements ArticleService{
@@ -39,9 +41,10 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public ArticleWrap selectArticle(HttpServletRequest request, HttpServletResponse response, int id)
+	public ArticleWrap selectArticle(HttpSession session,HttpServletRequest request, HttpServletResponse response, int id)
 			throws SQLException {
-		ArticleMaster article = dao.selectArticleMaster(id);
+		User u = (User)session.getAttribute("loginUser");
+		ArticleMaster article = dao.selectArticleMaster(id,u!=null?u.getUserId():null);
 		if (article==null) throw new SQLException();
 		List<ArticleDetail> subArticle = dao.selectArticleDetail(id);
 		List<ArticleComment> comment = dao.selectComment(id);
@@ -50,9 +53,11 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 	
 	@Override
-	public List<ArticleMaster> getAllArticle(HttpServletRequest request, HttpServletResponse response)
+	public List<ArticleMaster> getAllArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response)
 			throws SQLException {
-		return dao.selectArticleMasterAll();
+		User u = (User)session.getAttribute("loginUser");
+		
+		return dao.selectArticleMasterAll(u!=null?u.getUserId():null);
 	}
 
 	@Override
@@ -81,4 +86,32 @@ public class ArticleServiceImpl implements ArticleService{
 			throw new SQLException();
 		}
 	}
+
+	@Override
+	public int likeArticle(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			int articleId) throws SQLException {
+		User u = (User)session.getAttribute("loginUser");
+		int ret = dao.insertArticleLike(articleId, u.getUserId());
+		if (ret!=0) {
+			dao.incArticleLike(articleId);
+			return ret;
+		} else {
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public int dislikeArticle(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			int articleId) throws SQLException {
+		User u = (User)session.getAttribute("loginUser");
+		int ret = dao.deleteArticleLike(articleId, u.getUserId());
+		if (ret!=0) {
+			dao.decArticleLike(articleId);
+			return ret;
+		} else {
+			throw new SQLException();
+		}
+	}
+	
+	
 }

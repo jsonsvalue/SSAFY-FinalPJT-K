@@ -6,7 +6,7 @@
                     <ProfileImageComp :src="user.imageUrl" :user-id="user.userId"></ProfileImageComp>
                     <span class="profile-name">{{ user.name }}</span>
                 </div>
-                <textarea rows="5" class="comment-input" placeholder="댓글을 입력하세요..." @keypress:enter="handleCommentSubmit" v-model="comment.content"></textarea>
+                <textarea id="comment" rows="5" class="comment-input" placeholder="댓글을 입력하세요..." @keypress:enter="handleCommentSubmit" v-model="comment.content"></textarea>
                 <button class="btn btn-secondary" @click="handleCommentSubmit">등록</button>
             </div>
         </div>

@@ -31,6 +31,7 @@ const router = createRouter({
       path: '/article/:id',
       name: 'ArticleMaster',
       component: ArticleMasterView,
+      
     },
     {
       path: '/write/nyam',

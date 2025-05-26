@@ -18,7 +18,7 @@
             <ArticleMapComp></ArticleMapComp>
             <div class="button-box">
                 <BButton variant="primary" @click="submitArticle">작성하기</BButton>
-                <BButton variant="secondary" @click="$router.push('/article')">취소</BButton>
+                <BButton variant="secondary" @click="$router.push('/')">취소</BButton>
             </div>
         </div>
     </div>

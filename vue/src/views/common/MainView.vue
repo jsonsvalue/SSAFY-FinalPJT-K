@@ -1,19 +1,16 @@
 <template>
     <div class="main">
         <div class="side">
-            <p>사이드</p>
         </div>
         <div class="center">
-            <p>센터</p>
             <RouterView/>
         </div>
         <div class="side">
-            <p>사이드</p>
         </div>
     </div>
     <div class="float-button">
-        <RouterLink :to="{name:'ArticleWriteNyam'}">냠냠 작성</RouterLink>
-        <RouterLink :to="{name:'ArticleWriteRecipe'}">레시피 작성</RouterLink>
+        <RouterLink :to="{name:'ArticleWriteNyam'}"><div class="nyam"><img src="../../assets/icon/bowl-food.svg"></div></RouterLink>
+        <RouterLink :to="{name:'ArticleWriteRecipe'}"><div class="recipe"><img src="../../assets/icon/recipe.svg"></div></RouterLink>
     </div>
 </template>
 
@@ -24,6 +21,7 @@
 .main {
     display: flex;
     flex: 1 1 100px;
+    background-color: #FFFAEE;
 }
 
 div.main>div {
@@ -32,7 +30,7 @@ div.main>div {
 
 .side {
     flex : 1 1 100px;
-    background-color: antiquewhite;
+    background-color: #FFFAEE;
 }
 
 .center {
@@ -46,4 +44,37 @@ div.main>div {
     display: flex;
     flex-direction: column;
 }
+
+.float-button .nyam {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background-color: #f19121;
+}
+
+.float-button .nyam img {
+    width: 50px;
+    height: 50px;
+}
+
+.float-button .recipe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 65px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background-color: #80C134;
+}
+
+.float-button .recipe img {
+    width: 40px;
+    height: 40px;
+}
+
 </style>

@@ -16,12 +16,14 @@ public class ArticleMaster {
 	private String userId;
 	private String userName;
 	private String userImage;
+	private String sessionId;
 	private String type;
 	private int imageId;
 	private String imageUrl;
 	private String content;
 	private String ingredient;
 	private int likeCount;
+	private String isLike;
 	private String useYN;
 	private String rgstDttm;
 	private String mdfcDttm;

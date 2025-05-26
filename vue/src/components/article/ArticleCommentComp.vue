@@ -13,7 +13,7 @@
 <script setup>
     import ArticleCommentSubComp from '@/components/article/ArticleCommentSubComp.vue';
     import ArticleCommentWriteComp from './ArticleCommentWriteComp.vue';
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref} from 'vue';
     const count = ref(0);
     const props = defineProps({
         articleId: {
@@ -25,7 +25,7 @@
             default: () => []
         }
     });
-
+    
     count.value = computed(() => props.comment.length);
 </script>
 

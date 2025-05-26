@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="background">
         <template v-for="article in articleList"  :key="article.id">
             <ArticleFeedComp :article="article"></ArticleFeedComp>
         </template>
@@ -28,5 +28,4 @@
 </script>
 
 <style scoped>
-
 </style>   
