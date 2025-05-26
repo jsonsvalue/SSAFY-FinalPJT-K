@@ -2,10 +2,10 @@
     <div class="container">
         <div class="outline">
             <div class="profile">
-                <img src="../../assets/img/DeepSleepCho.jpg" style=""/>
+                <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
                 <div class="name-box">
-                    <p class="name">DeepMindSuin</p>
-                    <p class="category">냠냠</p>
+                    <p class="name" style="cursor: pointer;" @click="profile">{{article.userName}}</p>
+                    <p class="category">{{article.type=='eat'?'냠냠':'레시피'}}</p>
                 </div>
             </div>
             <RouterLink :to="{ name: 'ArticleMaster', params: { id: article.id } }">
@@ -30,6 +30,8 @@
 
 <script setup>
     import { defineProps, onBeforeMount } from 'vue';
+    import ProfileImageComp from '../user/ProfileImageComp.vue';
+    import { useRouter } from 'vue-router';
     const props = defineProps({
         'article' : {
             type:Object,
@@ -37,16 +39,22 @@
         }
     })
 
-    
-    /*
-     *  개발시에 활성화 시키기. 글 내용이 없으면 렌더링 하지 않음
-     */
+    const router = useRouter();
 
-    // onBeforeMount(()=>{
-    //     if (!props.article) {
-    //         throw new Error("article is empty")
-    //     }
-    // })
+    const profile = () => {
+        if (props.article.userId) {
+            router.push({
+                name: 'profile',
+                params: { userId: props.article.userId }
+            });
+        }
+    };
+
+    onBeforeMount(()=>{
+        if (!props.article) {
+            throw new Error("article is empty")
+        }
+    })
 </script>
 
 <style scoped>

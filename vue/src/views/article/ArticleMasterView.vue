@@ -2,9 +2,9 @@
     <div class="container">
         <div class="outline">
             <div class="profile">
-                <img src="../../assets/img/DeepSleepCho.jpg" style=""/>
+                <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
                 <div class="name-box">
-                    <p class="name">DeepMindSuin</p>
+                    <p class="name" style="cursor:pointer" @click="profile">{{article.userName}}</p>
                     <p class="category" v-if="article.type=='eat'">냠냠</p>
                     <p class="category" v-else>레시피</p>
                 </div>
@@ -43,6 +43,7 @@
     import { useRouter,useRoute } from 'vue-router';
     import ArticleDetailComp from '@/components/article/ArticleDetailComp.vue';
     import ArticleCommentComp from '@/components/article/ArticleCommentComp.vue';
+import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
     const article = ref({});
     const subArticle = ref([]);
     const comment = ref([]);
@@ -51,6 +52,12 @@
     const router = useRouter();
     const route = useRoute();
     const articleId = route.params.id;
+    const profile = () => {
+        router.push({
+            name: 'profile',
+            params: { userId: article.value.userId }
+        });
+    };
     onMounted(async () => {
         try {
             const response = await axios.get(url + '/article/' + articleId);

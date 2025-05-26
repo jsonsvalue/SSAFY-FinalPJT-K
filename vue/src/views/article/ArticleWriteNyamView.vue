@@ -3,10 +3,6 @@
         <div class="outline">
             <h3>냠냠 작성</h3>
             <div class="write-form">
-                <BInputGroup class="mb-3">
-                    <BInputGroupText>제목</BInputGroupText>
-                    <BFormInput v-model="article.title" placeholder="제목을 입력하세요" />
-                </BInputGroup>
                 <BInputGroup class="mb-3 content">
                     <BInputGroupText>내용</BInputGroupText>
                     <BFormTextarea v-model="article.content" placeholder="내용을 입력하세요" />
@@ -35,14 +31,14 @@
     import ImageUploadComp from '@/components/common/ImageUploadComp.vue';
     import ArticleWriteDetailComp from '@/components/article/ArticleWriteDetailComp.vue';
     import axios from 'axios';
-
+    import { useRouter } from 'vue-router';
+    const router = useRouter();
     const url = import.meta.env.VITE_API_URL + '/article';
 
     const article = ref({
         id: null,
         userId: null,
         type: 'eat',
-        title: '',
         content: '',
         ingredient: '',
         imageId: null,

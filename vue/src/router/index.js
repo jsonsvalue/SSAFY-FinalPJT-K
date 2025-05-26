@@ -1,11 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '@/views/common/MainView.vue'
-import SampleView from '@/views/SampleView.vue'
 import ArticleFeedView from '@/views/article/ArticleFeedView.vue'
-import LoginView from '@/views/user/LoginView.vue'
-import RegistView from '@/views/user/RegistView.vue'
 import ArticleWriteNyamView from '@/views/article/ArticleWriteNyamView.vue'
 import ArticleWriteRecipeView from '@/views/article/ArticleWriteRecipeView.vue'
+import MainView from '@/views/common/MainView.vue'
+import SampleView from '@/views/SampleView.vue'
+import LoginView from '@/views/user/LoginView.vue'
+import RegistView from '@/views/user/RegistView.vue'
+import ArticleMasterView from '@/views/article/ArticleMasterView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import MyPageView from '@/views/user/MyPageView.vue'
 import ProfileView from '@/views/user/ProfileView.vue'
@@ -24,12 +25,12 @@ const router = createRouter({
           name: 'feed',
           component:ArticleFeedView
         },
-        // {
-        //   // TODO 예시 컴포넌트. 대체 해야 함.
-        //   path: 'login',
-        //   component:ArticleFeedView
-        // },
       ]
+    },
+    {
+      path: '/article/:id',
+      name: 'ArticleMaster',
+      component: ArticleMasterView,
     },
     {
       path: '/write/nyam',

@@ -11,8 +11,8 @@ import { ref,defineProps } from 'vue';
     };
     const click = () => {
         router.push({
-            name: 'UserProfile',
-            params: { userId: props.userId }
+            name: 'profile',
+            params: { userId: props.userId}
         });
     };
     const img = ref(null);
