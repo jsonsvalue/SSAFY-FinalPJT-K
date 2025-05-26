@@ -100,19 +100,25 @@
             cols="4"
             class="p-1">
         >    
-            <!-- @click="articleStore.selectArticle(article.id)" -->
-            <div class="photo-item">
+            <!-- 
+              @click="articleStore.selectArticle(article.id)"
+              "
+              -->
+            <RouterLink :to="{ name: 'ArticleMaster', params: { id: article.id } }">
+              <div class="photo-item">
                 <img 
-                :src="`/${article.imageUrl}`"
-                :alt="`게시물 ${index + 1}`" 
-                class="w-100">
-                 <div><strong>ID:</strong> {{ article.id }}</div>
+                :src="`${imageUrl}${article.imageUrl}`"
+                :alt= "`게시물 ${index + 1}`" 
+                class="w-100"
+                style = "object-fit:cover"
+                >
+                <div><strong>ID:</strong> {{ article.id }}</div>
                 <div><strong>User:</strong> {{ article.userId }}</div>
                 <div><strong>Type:</strong> {{ article.type }}</div>
                 <div><strong>Image:</strong> {{ article.imageUrl }}</div>
                 <div><strong>Content:</strong> {{ article.content }}</div>
             </div>
-            
+            </RouterLink>
 
         </b-col>
         
@@ -139,6 +145,7 @@
     import { ref, onMounted, computed } from 'vue';
     import { BButton, BTabs, BTab, BRow, BCol } from 'bootstrap-vue-next';
 
+    const imageUrl = import.meta.env.VITE_IMAGE_URL;
     const route = useRoute();
     const userId = ref('');
 
