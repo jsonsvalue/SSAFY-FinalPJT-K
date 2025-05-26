@@ -1,19 +1,24 @@
 <template>
     <div class="comment">
-        <img src="../../assets/img/DeepSleepCho.jpg" style=""/>
+        <ProfileImageComp :src="comment.imageUrl" :user-id="comment.userId"></ProfileImageComp>
         <div class="comment-box">
-            <p class="name">DeepMindSuin</p>
+            <p class="name">{{comment.userName}}</p>
             <div class="detail">
-                <pre>맛있어요!!!
-ㅇㄴㅁㄹㅇㄴㅁㄹㄴㅇㅁㄹㄴㅁㅇㄹ
-ㅇㄴㅁㄹㅇㄴㅁㄹㄴㅇㅁㄻㄴㅇㄹㄴㅁㅇㄹㅇㄴㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅇㅁㄹㄴㅁㅇㄹㄴㅇㄴㅁㄹㅇㄴㅁㄹㄴㅇㄻㄴㅇㄻㄴㅇㄹ</pre>
+                <pre>{{comment.content}}</pre>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-
+import { defineProps } from 'vue';
+import ProfileImageComp from '../user/ProfileImageComp.vue';
+const props = defineProps({
+    comment: {
+        type: Object,
+        required: true
+    }
+});
 </script>
 
 <style scoped>
@@ -38,7 +43,7 @@
 .comment-box .name {
     font-weight: bold;
     margin-bottom: 5px;
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-left: 10px;
 }
 .comment-box .content {

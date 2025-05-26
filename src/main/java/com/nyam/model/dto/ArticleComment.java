@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -15,6 +14,8 @@ import lombok.experimental.FieldDefaults;
 public class ArticleComment {
 	private int id;
 	private String userId;
+	private String userName;
+	private String userImage;
 	private String articleId;
 	private String content;
 	private String useYN;

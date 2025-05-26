@@ -136,3 +136,8 @@ pre {
   margin-left: 3px;
   margin-right: 7px;
 }
+
+img:not([src]) {
+  content: url('./icon/no-image.svg'); /* 기본 이미지 파일 */
+  border: #A88 2px solid;
+}

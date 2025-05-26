@@ -2,8 +2,8 @@
     <div class="container">
         <div class="outline">
             <p class="count">댓글 {{count}}개</p>
-            <template v-for="(c, index) in comment" :key="index">
-                <ArticleCommentSubComp></ArticleCommentSubComp>
+            <template v-for="(c, index) in props.comment" :key="index">
+                <ArticleCommentSubComp :comment="c"></ArticleCommentSubComp>
             </template>
             <ArticleCommentWriteComp :article-id="props.articleId"></ArticleCommentWriteComp>
         </div>
@@ -13,8 +13,7 @@
 <script setup>
     import ArticleCommentSubComp from '@/components/article/ArticleCommentSubComp.vue';
     import ArticleCommentWriteComp from './ArticleCommentWriteComp.vue';
-    import { onMounted, ref } from 'vue';
-    const comment = null;
+    import { computed, onMounted, ref } from 'vue';
     const count = ref(0);
     const props = defineProps({
         articleId: {
@@ -27,11 +26,7 @@
         }
     });
 
-    onMounted(() => {
-        comment = props.comment;
-        count.value = comment.length;
-
-    });
+    count.value = computed(() => props.comment.length);
 </script>
 
 <style scoped>

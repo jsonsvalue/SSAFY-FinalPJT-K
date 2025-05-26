@@ -57,7 +57,18 @@
             response.data.article.imageUrl = imageUrl + response.data.article.imageUrl;
             article.value = response.data.article;
             response.data.subArticle.forEach((sub) => {
-                sub.imageUrl = imageUrl + sub.imageUrl;
+                if (sub.imageUrl) {
+                    sub.imageUrl = imageUrl + sub.imageUrl;
+                } else {
+                    sub.imageUrl = null;
+                }
+            });
+            response.data.comment.forEach((comm) => {
+                if (comm.imageUrl) {
+                    comm.imageUrl = imageUrl + comm.imageUrl;
+                } else {
+                    comm.imageUrl = null;
+                }
             });
             subArticle.value = response.data.subArticle;
             comment.value = response.data.comment;

@@ -3,8 +3,8 @@
         <div class="container">
             <div class="outline">
                 <div class="profile">
-                    <img src="../../assets/img/DeepSleepCho.jpg" alt="프로필 이미지" class="profile-image">
-                    <span class="profile-name">사용자 이름</span>
+                    <ProfileImageComp :src="user.imageUrl" :user-id="user.userId"></ProfileImageComp>
+                    <span class="profile-name">{{ user.name }}</span>
                 </div>
                 <textarea rows="5" class="comment-input" placeholder="댓글을 입력하세요..." @keypress:enter="handleCommentSubmit" v-model="comment.content"></textarea>
                 <button class="btn btn-secondary" @click="handleCommentSubmit">등록</button>
@@ -18,13 +18,15 @@
 import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import ProfileImageComp from '../user/ProfileImageComp.vue';
+    
 
     const comment = ref({
         userId:null,
         content:'',
         articleId: null
     });
-    const user = JSON.parse(sessionStorage.getItem("user"))
+    const user = ref(JSON.parse(sessionStorage.getItem("user")))
     const url = import.meta.env.VITE_API_URL + '/article';
     const handleCommentSubmit = () => {
         if (comment.value.content.trim() === '') {

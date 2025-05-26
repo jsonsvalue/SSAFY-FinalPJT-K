@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-    import { ref,onMounted } from 'vue';
+    import { ref,onMounted, watch } from 'vue';
     import axios from 'axios'
     
     /* DOM */
@@ -30,7 +30,6 @@
     const removeImage = () => {
         props.image.imageUrl = null
         props.image.imageId = null
-        isEmpty.value = true
         input.value.value = ""
         emits('onFileUpload', null)
     }
@@ -42,7 +41,6 @@
             }
         })
         .then(res => {
-            isEmpty.value = false
             props.image.imageUrl = resourceUrl + res.data.orgFile
             props.image.imageId = res.data.id
             emits('onFileUpload',res.data.id,resourceUrl + res.data.orgFile)
@@ -86,6 +84,14 @@
                 imageId: null,
                 imageUrl: null
             }
+        }
+    })
+
+    watch(() => props.image.imageUrl, (newVal) => {
+        if (newVal) {
+            isEmpty.value = false
+        } else {
+            isEmpty.value = true
         }
     })
 

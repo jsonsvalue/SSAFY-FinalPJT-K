@@ -14,6 +14,8 @@ import lombok.ToString;
 public class ArticleMaster {
 	private int id;
 	private String userId;
+	private String userName;
+	private String userImage;
 	private String type;
 	private int imageId;
 	private String imageUrl;
