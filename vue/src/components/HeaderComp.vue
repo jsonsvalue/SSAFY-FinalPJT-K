@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-    import { BInputGroup,BFormInput,BButton,BFormSelect,BFormSelectOption } from 'bootstrap-vue-next';
+    import { BInputGroup,BFormInput,BButton,BFormSelect,BModal } from 'bootstrap-vue-next';
     import { onBeforeMount, ref } from 'vue';
     const searchOption = ref('recipe');
     const options = ref([
@@ -38,7 +38,6 @@
         { value: 'nyam', text: '냠냠' },
         { value: 'user', text: '사용자' }
     ]);
-
     const search = () => {
         // 검색 로직 구현
         console.log(`Searching for ${searchOption.value}`);

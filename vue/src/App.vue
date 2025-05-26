@@ -2,6 +2,7 @@
   <div class="h-100 d-flex flex-column">
     <HeaderComp/>
     <RouterView/>
+    <ImageModalComp ref="imageModal"/>
   </div>
 </template>
 
@@ -9,6 +10,7 @@
   import axios from "axios";
 import { onBeforeMount } from 'vue';
 import HeaderComp from './components/HeaderComp.vue';
+import ImageModalComp from './components/common/ImageModalComp.vue';
 import router from './router';
 
   const REST_API_URL = import.meta.env.VITE_API_URL;
