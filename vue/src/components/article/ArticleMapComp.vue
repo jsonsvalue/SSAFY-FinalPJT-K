@@ -195,13 +195,15 @@
 .content {
   display: flex;
   width: 100%;
+  height:100%;
   max-width: 1100px;
   flex: 1 1 auto;
 }
 
 .sidebar {
   width: 280px;
-  height: 100%;
+  height: 85%;
+  min-height:480px;
   overflow-y: auto;
   background: #f9f9f9;
   padding: 10px;
