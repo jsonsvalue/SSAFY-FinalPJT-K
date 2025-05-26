@@ -114,36 +114,6 @@
 		   AND a.use_yn = 'Y'
 	</select>
 	
-	<select id="selectArticleMasterByUser" resultType="ArticleMaster">
-		SELECT a.id
-		     , a.user_id
-		     , a.type
-		     , a.image_id
-		     , a.content
-		     , a.ingredient
-		     , i.org_file as image_url
-		  FROM article_master a
-		     , image i
-		 WHERE a.user_id = #{userId}
-		   AND a.image_id = i.id
-		   AND a.use_yn = 'Y'
-	</select>
-	
-	<select id="selectArticleMasterByUser" resultType="ArticleMaster">
-		SELECT a.id
-		     , a.user_id
-		     , a.type
-		     , a.image_id
-		     , a.content
-		     , a.ingredient
-		     , i.org_file as image_url
-		  FROM article_master a
-		     , image i
-		 WHERE a.user_id = #{userId}
-		   AND a.image_id = i.id
-		   AND a.use_yn = 'Y'
-	</select>
-	
 	<insert id="insertComment" parameterType="ArticleComment" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO article_comment (
 			article_id
