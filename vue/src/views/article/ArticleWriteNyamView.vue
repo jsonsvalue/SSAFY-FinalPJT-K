@@ -19,13 +19,7 @@
             <div class="addSub">
                 <BButton variant="outline-primary" @click="addSubArticle">추가</BButton>
             </div>
-<<<<<<< HEAD
             <ArticleMapComp></ArticleMapComp>
-=======
-            
-            <ArticleMapComp></ArticleMapComp>
-
->>>>>>> branch 'master' of https://github.com/jsonsvalue/SSAFY-FinalPJT-K.git
             <div class="button-box">
                 <BButton variant="primary" @click="submitArticle">작성하기</BButton>
                 <BButton variant="secondary" @click="$router.push('/article')">취소</BButton>
