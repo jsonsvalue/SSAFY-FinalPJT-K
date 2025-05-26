@@ -23,8 +23,10 @@ public interface UserDao {
 	// User 삭제
 	int delete(String userId);
 	
-	// User를 검색한다.
-	// 특정 keyword로 시작하는 User목록을 반환한다.
+	// 특정 keyword로 시작하는 모든 User를 List로 반환한다.
 	List<User> search(String keyword);
+	
+	// 정확하게 userId 문자열이 일치할 때 User를 반환한다.
+	User searchExact(String userId);
 	
 }

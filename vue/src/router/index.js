@@ -6,7 +6,10 @@ import LoginView from '@/views/user/LoginView.vue'
 import RegistView from '@/views/user/RegistView.vue'
 import ArticleWriteNyamView from '@/views/article/ArticleWriteNyamView.vue'
 import ArticleWriteRecipeView from '@/views/article/ArticleWriteRecipeView.vue'
-import ArticleMasterView from '@/views/article/ArticleMasterView.vue'
+
+import MyPageView from '@/views/user/MyPageView.vue'
+import ProfileView from '@/views/user/ProfileView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,11 +30,6 @@ const router = createRouter({
         //   component:ArticleFeedView
         // },
       ]
-    },
-    {
-      path: '/article/:id',
-      name: 'ArticleMaster',
-      component: ArticleMasterView,
     },
     {
       path: '/write/nyam',
@@ -58,7 +56,17 @@ const router = createRouter({
       name: 'regist',
       component: RegistView,
     },
-
+    {
+      path: '/profile/:userId',
+      name: 'profile',
+      component: ProfileView,
+    }
+    ,
+    {
+      path: '/myPage',
+      name: 'myPage',
+      component: MyPageView,
+    }
 
   ]
 })

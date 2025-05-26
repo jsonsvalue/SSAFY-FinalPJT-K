@@ -35,17 +35,18 @@
 		;
 	</insert>
 	
-	
+	<!-- Data 유무에 따른 동적 퀴리 형성으로, 데이터가 존재할 때만 쿼리를 형성한다. -->
 	<update id = "update" parameterType = "user">
 		UPDATE user
-		SET 
-			user_id = #{userId},
-			name = #{name},
-			email = #{email},
-			password = #{password},
-			intro = #{intro},
-			feed_type = #{feedType},
+		<set>
+			<if test = "userId !=null">user_id = #{userId},</if>
+			<if test = "name != null">name = #{name},</if>
+			<if test = "email != null">email = #{email},</if>
+			<if test = "password != null">password = #{password},</if>
+			<if test = "intro != null">intro = #{intro},</if>
+			<if test = "feedType != null">feed_type = #{feedType},</if>
 			mdfc_dttm = now()
+		</set>
 		WHERE user_id = #{userId} AND use_yn = 'Y'
 		;
 	</update>
@@ -66,6 +67,12 @@
 		WHERE user_id LIKE CONCAT( #{keyword}, '%') AND use_yn = 'Y'
 		;
 		
+	</select>
+	
+	<select id = "searchExact" parameterType = "String">
+		SELECT *
+		FROM user
+		WHERE user_id = #{userId};
 	</select>
 	
 	

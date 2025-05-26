@@ -18,5 +18,8 @@ public interface ArticleService {
 	
 	List<ArticleMaster> getAllArticle(HttpServletRequest request, HttpServletResponse response) throws SQLException;
 	
+	List<ArticleMaster> selectArticleByUser(HttpServletRequest request, HttpServletResponse response, String userId) throws SQLException;
+
 	int writeComment(HttpServletRequest request, HttpServletResponse response, ArticleComment comment) throws SQLException;
+
 }

@@ -65,6 +65,18 @@ public class ArticleController {
 		}
 	}
 	
+	@GetMapping("/articleUser/{userId}")
+	public ResponseEntity<?> selectArticleByUser(HttpSession session, HttpServletRequest request, HttpServletResponse response, @PathVariable("userId") String userId){
+		try {
+			List<ArticleMaster> articleMaster = service.selectArticleByUser(request, response, userId);
+			return ResponseEntity.ok(articleMaster);
+			
+		}catch(Exception err) {
+			err.printStackTrace();
+      return ResponseEntity.badRequest().build();
+		}
+  }
+  
 	@PostMapping("/article/{id}/comment")
 	public ResponseEntity<?> postComment(HttpSession session, HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id,@RequestBody ArticleComment comment) {
 		User user = (User)session.getAttribute("loginUser");
