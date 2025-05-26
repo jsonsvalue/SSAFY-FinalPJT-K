@@ -12,6 +12,8 @@ public class User {
 	private String role;
 	private String intro;
 	private String feedType;
+	private String imageId;
+	private String imageUrl;
 	
 	private Character useYN;
 	
@@ -23,7 +25,7 @@ public class User {
 	public User() {
 	}
 	
-	public User(String userId, String name, String email, String password, String role, Character userYN, Date rgstDttm, Date mdfcDttm, String info, String feedType) {
+	public User(String userId, String name, String email, String password, String role, Character userYN, Date rgstDttm, Date mdfcDttm, String info, String feedType, String imageId, String imageUrl) {
 		this.userId = userId; 
 		this.name = name;
 		this.email = email;
@@ -34,6 +36,8 @@ public class User {
 		this.mdfcDttm = mdfcDttm;
 		this.intro = intro;
 		this.feedType = feedType;
+		this.imageId = imageId;
+		this.imageUrl = imageUrl;
 	}
 
 	public String getUserId() {
@@ -116,13 +120,28 @@ public class User {
 		this.mdfcDttm = mdfcDttm;
 	}
 
+	public String getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", name=" + name + ", email=" + email + ", password=" + password + ", role="
-				+ role + ", intro=" + intro + ", feedType=" + feedType + ", useYN=" + useYN + ", rgstDttm=" + rgstDttm
-				+ ", mdfcDttm=" + mdfcDttm + "]";
+				+ role + ", intro=" + intro + ", feedType=" + feedType + ", imageId=" + imageId + ", imageUrl="
+				+ imageUrl + ", useYN=" + useYN + ", rgstDttm=" + rgstDttm + ", mdfcDttm=" + mdfcDttm + "]";
 	}
-
 	
 	
 

@@ -16,11 +16,21 @@
 		
 	</insert>
 	
+	<delete id = "unfollow" parameterType = "String">
+		DELETE
+		FROM follow
+		WHERE 
+			user_id = #{userId} 
+			AND follow_id = #{followId}
+			AND use_yn = 'Y'
+		;
+		
+	</delete>
 	
 	<select id = "getFollow" parameterType = "String">
 		SELECT *
 		FROM follow
-		WHERE user_id = #{userId}
+		WHERE user_id = #{userId} and use_yn = 'Y'
 		;
 	</select>
 	
@@ -28,7 +38,7 @@
 	<select id = "getFollower" parameterType = "String">
 		SELECT *
 		FROM follow
-		WHERE follow_id = #{followId}
+		WHERE follow_id = #{followId} and use_yn = 'Y'
 		;
 	</select>
 	

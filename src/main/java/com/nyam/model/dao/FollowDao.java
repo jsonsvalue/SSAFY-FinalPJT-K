@@ -15,4 +15,7 @@ public interface FollowDao {
 	// 나를 Follow하는 사용자 목록을 가져온다.
 	List<Follow> getFollower(String followId);
 	
+	// 상대 이용자를 Unfollow한다.
+	int unfollow(String userId, String followId);
+	
 }

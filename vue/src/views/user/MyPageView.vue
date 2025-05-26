@@ -5,20 +5,28 @@
       <div class="bg-light p-3">
         <h4 class="mb-0 fw-bold">프로필 편집</h4>
       </div>
-    
+
+      <!-- <ProfileImageComp 
+                :src="user.imageUrl" 
+                :user-id="user.userId" 
+                :class="rounded-circle"
+                style="width: 60px; height: 60px; object-fit: cover;">
+      </ProfileImageComp> -->
+
       <!-- Profile Section -->
       <div class="bg-light p-3">
         <div class="bg-white rounded-3 p-3 d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center">
             <div class="position-relative me-3">
               <img 
-                :src= "store.userInfo?.imageUrl || defaultImage"  
+                :src= "`${imageUrl}${store.userInfo?.imageUrl}`|| defaultImage"  
                 alt="Profile" 
                 class="rounded-circle"
-                style="width: 60px; height: 60px; object-fit: cover;"
+                style="width: 60px; height: 60px; object-fit: cover"
               >
+              
             </div>
-
+            
             <div>
                 <div v-if="store.userInfo" class="fw-bold text-dark">
                     {{ store.userInfo.userId }}
@@ -37,6 +45,10 @@
           >
             사진 변경
           </b-button>
+          <!-- Modal창을 띄우고 사진을 업로드 한 다음,
+           img id를 갖고 user의 정보를 업데이트한다. --> 
+          <!-- <ImageUploadComp style="height: 200px;" :image="article"/> -->
+
         </div>
       </div>
 
@@ -188,6 +200,8 @@
 </template>
 
 <script setup>
+    import ImageUploadComp from '@/components/common/ImageUploadComp.vue';
+    import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
     import {  BFormInput, BFormTextarea, BFormCheckbox, BFormSelect, BButton} from 'bootstrap-vue-next';
     import { useUserStore } from '@/stores/user';
     import { useRoute } from 'vue-router';
@@ -198,7 +212,10 @@
     onMounted(()=>{
         store.getUserInfo()
     })
-    
+
+    const user = ref(JSON.parse(sessionStorage.getItem("user")));
+
+    const imageUrl = import.meta.env.VITE_IMAGE_URL;
     const defaultImage = profileDefault;
     
     const feedTypeOptions = [

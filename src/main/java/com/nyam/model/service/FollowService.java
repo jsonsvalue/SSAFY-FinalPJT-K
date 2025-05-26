@@ -17,4 +17,6 @@ public interface FollowService {
 	// 특정 user의 Follower를 가져온다.
 	List<Follow> getFollowersList(String followId);
 	
+	// 특정 user를 unfollow한다.
+	boolean unfollowUser(String userId, String followId);
 }

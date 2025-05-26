@@ -20,6 +20,7 @@ const props = defineProps({
         required: true
     }
 });
+// console.log(props.comment)
 const profile = () => {
     router.push({
         name: 'profile',
