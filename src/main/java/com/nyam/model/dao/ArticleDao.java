@@ -25,7 +25,10 @@ public interface ArticleDao {
 	
 	List<ArticleDetail> selectArticleDetail(int articleId);
 	
+	List<ArticleMaster> selectArticleMasterByUser(String userId);
+	
 	int insertComment(ArticleComment comment);
 	
 	List<ArticleComment> selectComment(int articleId);
+
 }

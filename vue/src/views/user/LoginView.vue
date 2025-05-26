@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-    import { BFormInput, BButton, BInputGroup } from 'bootstrap-vue-next';
+    import { BForm, BFormGroup, BFormInput,BButton} from 'bootstrap-vue-next';
     import {useUserStore} from '@/stores/user';
     import {ref} from "vue";    
      
