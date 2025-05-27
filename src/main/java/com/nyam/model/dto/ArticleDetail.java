@@ -18,6 +18,7 @@ public class ArticleDetail {
 	private int imageId;
 	private String imageUrl;
 	private String content;
+	private String status;
 	private String useYN;
 	private String rgstDttm;
 	private String mdfcDttm;

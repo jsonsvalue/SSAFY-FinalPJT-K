@@ -1,5 +1,5 @@
 <template>
-    <BModal id="image-modal" v-model="showModal" no-footer size="xl">
+    <BModal id="image-modal" v-model="showModal" no-footer no-header size="xl" centered>
         <div class="image-container" ref="imageContainer">
             <img ref="image" :src="imageUrl" class="img-fluid" alt="이미지" @load="onLoad"/>
         </div>

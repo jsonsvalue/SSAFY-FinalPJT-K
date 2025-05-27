@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nyam.model.dto.ArticleComment;
@@ -45,6 +47,20 @@ public class ArticleController {
 		}
 	}
 	
+	@PatchMapping("/article")
+	public ResponseEntity<?> updateArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response,@RequestBody ArticleWrap article) {
+		User user = (User)session.getAttribute("loginUser");
+		if (user==null) return ResponseEntity.badRequest().build();
+		article.getArticle().setUserId(user.getUserId());
+		try {
+			int id = service.writeArticle(request, response, article);
+			return ResponseEntity.ok(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	} 
+	
 	@GetMapping("/article/{id}")
 	public ResponseEntity<?> selectArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id) {
 		try {
@@ -57,9 +73,9 @@ public class ArticleController {
 	}
 	
 	@GetMapping("/feed")
-	public ResponseEntity<?> getAllArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> getAllArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response, @RequestParam("top") String top) {
 		try {
-			List<ArticleMaster> list = service.getAllArticle(session,request, response);
+			List<ArticleMaster> list = service.getFeed(session,request, response,Integer.parseInt(top));
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,6 +132,18 @@ public class ArticleController {
 			return ResponseEntity.ok(id);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@GetMapping("/article/search")
+	public ResponseEntity<?> searchArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response, @RequestParam("keyword") String keyword, @RequestParam("type") String type,@RequestParam("top") String top){
+		try {
+			List<ArticleMaster> articleMaster = service.searchArticle(request, response, keyword,type,Integer.parseInt(top));
+			return ResponseEntity.ok(articleMaster);
+			
+		}catch(Exception err) {
+			err.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
 	}

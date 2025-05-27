@@ -17,7 +17,7 @@ public interface ArticleDao {
 	
 	ArticleMaster selectArticleMaster(@Param("articleId") int articleId,@Param("sessionId") String sessionId);
 	
-	List<ArticleMaster> selectArticleMasterAll(String sessionId);
+	List<ArticleMaster> getFeed(String sessionId,int top);
 	
 	int insertArticleDetail(ArticleDetail detail);
 	
@@ -40,4 +40,6 @@ public interface ArticleDao {
 	int incArticleLike(int articleId);
 	
 	int decArticleLike(int articleId);
+	
+	List<ArticleMaster> searchArticle(@Param("keyword") String keyword, @Param("type") String type, @Param("top") int top);
 }

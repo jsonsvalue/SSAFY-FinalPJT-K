@@ -26,13 +26,19 @@
                     <ArticleDetailComp :sub="sub"></ArticleDetailComp>
                 </template>
             </div>
-            <div class="button-box">
-                <div :class="{dislike:isLike,like:!isLike}" @click="like">
-                    <img/>
-                    <span>{{article.likeCount}}</span>
+            <div class="bottom-botton d-flex justify-content-between">
+                <div class="button-box">
+                    <div :class="{dislike:isLike,like:!isLike}" @click="like">
+                        <img/>
+                        <span>{{article.likeCount}}</span>
+                    </div>
+                    <div class="comment" @click="toComment"><img src="../../assets/icon/comment.svg"/></div>
+                    <div class="share" @click="share"><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></div>
                 </div>
-                <div class="comment" @click="toComment"><img src="../../assets/icon/comment.svg"/></div>
-                <div class="share" @click="share"><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></div>
+                <div class="writer-botton">
+                    <button class="btn btn-secondary" @click="goUpdate">수정</button>
+                    <button class="btn btn-warning" @click="doDelete">삭제</button>
+                </div>
             </div>
         </div>
         <ArticleCommentComp :article-id="Number(articleId)" :comment="comment"></ArticleCommentComp>
@@ -60,6 +66,8 @@
     const route = useRoute();
     const articleId = route.params.id;
     const image = useImageStore();
+    const isWriter = ref(false);
+    const sessionUser = JSON.parse(localStorage.getItem('user'));
     const profile = () => {
         router.push({
             name: 'profile',
@@ -70,6 +78,35 @@
         image.openModal(url);
     };
     const toast = ref(null);
+
+    const doDelete = () => {
+        if (confirm('정말로 삭제하시겠습니까?')) {
+            axios.delete(url + '/article/' + articleId)
+            .then(res => {
+                alert('삭제되었습니다.');
+                router.push('/');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('삭제에 실패했습니다.');
+            });
+        }
+    };
+
+    const goUpdate = () => {
+        if (article.value.type === 'recipe') {
+            router.push({
+                name: 'ArticleEditRecipe',
+                params: { id: articleId }
+            });
+        } else {
+            router.push({
+                name: 'ArticleEditNyam',
+                params: { id: articleId }
+            });
+        }
+    };
+
     onMounted(async () => {
         if (route.query.comment) {
             setTimeout(() => {
@@ -97,7 +134,7 @@
             subArticle.value = response.data.subArticle;
             comment.value = response.data.comment;
             isLike.value = article.value.isLike === 'true';
-            console.log(article);
+            isWriter.value = sessionUser && sessionUser.id === article.value.userId;
         } catch (error) {
             console.error('Error fetching articles:', error);
             alert('유효하지 않은 접근입니다.');
@@ -109,6 +146,7 @@
     watch(() => article.value.isLike, (newVal) => {
         isLike.value = newVal === 'true';
     });
+
     
     const like = () => {
         
@@ -134,7 +172,6 @@
         }
     };
     const toComment = () => {
-        // scroll to the comment section
         const commentSection = document.querySelector('#comment');
         if (commentSection) {
             commentSection.scrollIntoView({ behavior: 'smooth' });
@@ -232,5 +269,20 @@
     }
     .img-box {
         cursor:pointer
+    }
+    .bottom-botton {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .button-box {
+        display: flex;
+        align-items: center;
+    }
+    .writer-botton {
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 </style>   

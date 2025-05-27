@@ -4,7 +4,11 @@
             <div class="profile">
                 <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
                 <div class="name-box">
-                    <p class="name" style="cursor: pointer;" @click="profile">{{article.userName}}</p>
+                    <div class="d-flex">
+                        <span class="name" style="cursor: pointer;" @click="profile">{{article.userName}}</span>
+                        <img v-if="article.type=='recipe'" src="../../assets/icon/recipe.svg" alt="Recipe Icon"/>
+                        <img v-if="article.type=='eat'" src="../../assets/icon/bowl-food.svg" alt="Eat Icon"/>
+                    </div>
                     <p class="category">{{article.type=='eat'?'냠냠':'레시피'}}</p>
                 </div>
             </div>
@@ -12,6 +16,7 @@
                 <div class="img-box">
                     <img :src="article.imageUrl" alt="Article Image"/>
                 </div>
+                <pre>{{ article.content }}</pre>
             </RouterLink>
             <div class="button-box">
                 <div :class="{dislike:isLike,like:!isLike}" @click="like">
@@ -117,5 +122,24 @@
     .dislike img {
         content: url('../../assets/icon/heart-fill.svg');
         border: none;
+    }
+
+    .name-box img {
+        width: 25px;
+        height: 25px;
+        margin-left: 5px;
+        border-radius: 0px;
+    }
+
+    pre,a {
+        font-size: 1em;
+        text-decoration: none;
+        color: #000;
+    }
+
+    pre {
+        margin: 20px 10px;
+        white-space: pre-wrap;
+        word-break: break-all;
     }
 </style>

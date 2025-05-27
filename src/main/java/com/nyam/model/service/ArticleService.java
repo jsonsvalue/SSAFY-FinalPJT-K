@@ -17,7 +17,7 @@ public interface ArticleService {
 	
 	ArticleWrap selectArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response, int id) throws SQLException;
 	
-	List<ArticleMaster> getAllArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws SQLException;
+	List<ArticleMaster> getFeed(HttpSession session, HttpServletRequest request, HttpServletResponse response,int top) throws SQLException;
 	
 	List<ArticleMaster> selectArticleByUser(HttpServletRequest request, HttpServletResponse response, String userId) throws SQLException;
 
@@ -26,4 +26,6 @@ public interface ArticleService {
 	int likeArticle(HttpServletRequest request,HttpServletResponse response, HttpSession session, int articleId) throws SQLException;
 	
 	int dislikeArticle(HttpServletRequest request,HttpServletResponse response, HttpSession session, int articleId) throws SQLException;
+	
+	List<ArticleMaster> searchArticle(HttpServletRequest request, HttpServletResponse response, String keyword, String type, int top);
 }

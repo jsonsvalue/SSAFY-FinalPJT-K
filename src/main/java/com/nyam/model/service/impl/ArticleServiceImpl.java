@@ -53,11 +53,11 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 	
 	@Override
-	public List<ArticleMaster> getAllArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response)
+	public List<ArticleMaster> getFeed(HttpSession session, HttpServletRequest request, HttpServletResponse response,int top)
 			throws SQLException {
 		User u = (User)session.getAttribute("loginUser");
 		
-		return dao.selectArticleMasterAll(u!=null?u.getUserId():null);
+		return dao.getFeed(u!=null?u.getUserId():null,top);
 	}
 
 	@Override
@@ -112,6 +112,10 @@ public class ArticleServiceImpl implements ArticleService{
 			throw new SQLException();
 		}
 	}
-	
-	
+
+	@Override
+	public List<ArticleMaster> searchArticle(HttpServletRequest request, HttpServletResponse response, String keyword,
+			String type, int top) {
+		return dao.searchArticle(keyword, type, top);
+	}
 }
