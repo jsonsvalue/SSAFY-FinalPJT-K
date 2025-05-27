@@ -1,5 +1,6 @@
 <template>
     <header class="text-bg-primary sticky-top justify-content-center" style="height: 80px;">
+        
         <div class="pt-3 pb-3 ps-5 pe-5">
             <div class="row align-items-center">
                 <a id="homeIcon" href="/" class="d-block w-auto h-100 no-decoration">
@@ -46,7 +47,11 @@
                 </div>
             </div>
         </div>
+
+
     </header>
+
+
 </template>
 
 <script setup>
@@ -57,7 +62,7 @@
     import { useRouter} from 'vue-router';
     import router from '@/router';
     import axios from 'axios';
-
+    
     const userStore = useUserStore();
     
     onMounted(()=>{
@@ -65,7 +70,7 @@
     })
 
     const image_url = import.meta.env.VITE_IMAGE_URL;
-    const user = ref(JSON.parse(sessionStorage.getItem("user")))
+    const user = ref(JSON.parse(sessionStorage.getItem("user")));
     const searchOption = ref('recipe');
     const options = ref([
         { value: 'recipe', text: '레시피' },
@@ -84,19 +89,23 @@
         });
     }
 
+    const REST_API_URL = import.meta.env.VITE_API_URL;
     const logout = async function(){
         try{
             // 어차피 Session에 있는 정보를 없애고, 쿠키에서 JSessionId를 가져오는 처리를 해주면 된다.
-            await axios.post('/logout', {}, {withCredentials:true});
+            await axios.post(`${REST_API_URL}/logout`, {}, {withCredentials:true});
             
-            console.log(response.data);
+            sessionStorage.removeItem("user");            
+
+            router.push("/login");
+            router.go();
         }
         catch{
             console.log('로그아웃 실패');
         }
 
 
-        router.push("/login");
+        
     }
     
     
@@ -118,4 +127,8 @@
         cursor: pointer;
 
     } 
+
+    .loginPage{
+        margin: 200px 0;
+    }
 </style>
