@@ -118,4 +118,29 @@ public class ArticleServiceImpl implements ArticleService{
 			String type, int top) {
 		return dao.searchArticle(keyword, type, top);
 	}
+
+	@Override
+	public int updateArticle(HttpServletRequest request, HttpServletResponse response, ArticleWrap article)
+			throws SQLException {
+		int ret = dao.updateArticleMaster(article.getArticle());
+		List<ArticleDetail> list = article.getSubArticle();
+		for (ArticleDetail item : list) {
+			if (item.getStatus().equals("D")) {
+				ret += dao.deleteArticleDetail(item.getArticleId());
+			} else if (item.getStatus().equals("U")) {
+				ret += dao.updateArticleDetail(item);
+			} else if (item.getStatus().equals("I")) {
+				ret += dao.insertArticleDetail(item);
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int deleteArticle(HttpServletRequest request, HttpServletResponse response, int articleId)
+			throws SQLException {
+		int ret = dao.deleteArticleMaster(articleId);
+		if (ret==0) throw new SQLException();
+		return ret;
+	}
 }

@@ -53,13 +53,26 @@ public class ArticleController {
 		if (user==null) return ResponseEntity.badRequest().build();
 		article.getArticle().setUserId(user.getUserId());
 		try {
-			int id = service.writeArticle(request, response, article);
+			int id = service.updateArticle(request, response, article);
 			return ResponseEntity.ok(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().build();
 		}
-	} 
+	}
+	
+	@DeleteMapping("/article/{id}")
+	public ResponseEntity<?> updateArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response,@PathVariable("id") String articleId) {
+		User user = (User)session.getAttribute("loginUser");
+		if (user==null) return ResponseEntity.badRequest().build();
+		try {
+			int id = service.deleteArticle(request, response, Integer.parseInt(articleId));
+			return ResponseEntity.ok(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().build();
+		}
+	}
 	
 	@GetMapping("/article/{id}")
 	public ResponseEntity<?> selectArticle(HttpSession session, HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id) {

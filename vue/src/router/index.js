@@ -8,6 +8,7 @@ import RegistView from '@/views/user/RegistView.vue'
 import ArticleMasterView from '@/views/article/ArticleMasterView.vue'
 import ArticleSearchView from '@/views/article/ArticleSearchView.vue'
 import ArticleEditNyamView from '@/views/article/ArticleEditNyamView.vue'
+import ArticleEditRecipeView from '@/views/article/ArticleEditRecipeView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import MyPageView from '@/views/user/MyPageView.vue'
@@ -36,10 +37,14 @@ const router = createRouter({
       
     },
     {
-      path: '/article/:id/editnyam',
+      path: '/article/:id/edit-nyam',
       name: 'ArticleEditNyam',
       component: ArticleEditNyamView,
-      
+    },
+    {
+      path: '/article/:id/edit-recipe',
+      name: 'ArticleEditRecipe',
+      component: ArticleEditRecipeView,
     },
     {
       path: '/search',

@@ -28,4 +28,8 @@ public interface ArticleService {
 	int dislikeArticle(HttpServletRequest request,HttpServletResponse response, HttpSession session, int articleId) throws SQLException;
 	
 	List<ArticleMaster> searchArticle(HttpServletRequest request, HttpServletResponse response, String keyword, String type, int top);
+	
+	int updateArticle(HttpServletRequest request, HttpServletResponse response,ArticleWrap article) throws SQLException;
+	
+	int deleteArticle(HttpServletRequest request, HttpServletResponse response,int articleId) throws SQLException;
 }
