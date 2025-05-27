@@ -1,7 +1,5 @@
 <template>
-    <RouterLink :to="{name:'profile',params :{userId:props.userId}}">
-        <img ref="img" @error="noImage" :alt="alt" :class=props.class class="profile-image" />
-    </RouterLink>
+    <img ref="img" @error="noImage" :alt="alt" :class=props.class class="profile-image" @click="click" style="cursor:pointer" />
 </template>
 
 <script setup>

@@ -1,6 +1,8 @@
 <template>
     <div class="comment">
-        <ProfileImageComp :src="comment.imageUrl" :user-id="comment.userId"></ProfileImageComp>
+        <div style="width:50px;height:50px">
+            <ProfileImageComp :src="comment.imageUrl" :user-id="comment.userId"></ProfileImageComp>
+        </div>
         <div class="comment-box">
             <p class="name" @click="profile" style="cursor: pointer;">{{ comment.userName }}</p>
             <div class="detail">

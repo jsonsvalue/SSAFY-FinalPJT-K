@@ -3,7 +3,9 @@
         <div class="container">
             <div class="outline">
                 <div class="profile">
-                    <ProfileImageComp :src="user.imageUrl" :user-id="user.userId"></ProfileImageComp>
+                    <div style="width:50px;height:50px">
+                        <ProfileImageComp :src="user.imageUrl" :user-id="user.userId"></ProfileImageComp>
+                    </div>
                     <span class="profile-name">{{ user.name }}</span>
                 </div>
                 <textarea id="comment" rows="5" class="comment-input" placeholder="댓글을 입력하세요..." @keypress:enter="handleCommentSubmit" v-model="comment.content"></textarea>

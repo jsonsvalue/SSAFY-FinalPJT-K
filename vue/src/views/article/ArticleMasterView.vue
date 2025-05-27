@@ -2,7 +2,9 @@
     <div class="container">
         <div class="outline">
             <div class="profile">
-                <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
+                <div style="width:50px;height:50px">
+                    <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
+                </div>
                 <div class="name-box">
                     <p class="name" style="cursor:pointer" @click="profile">{{article.userName}}</p>
                     <p class="category" v-if="article.type=='eat'">냠냠</p>

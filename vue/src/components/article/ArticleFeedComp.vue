@@ -2,7 +2,9 @@
     <div class="container">
         <div class="outline">
             <div class="profile">
-                <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
+                <div style="width:50px;height:50px">
+                    <ProfileImageComp :src="article.userImage" :user-id="article.userId"></ProfileImageComp>
+                </div>
                 <div class="name-box">
                     <div class="d-flex">
                         <span class="name" style="cursor: pointer;" @click="profile">{{article.userName}}</span>
