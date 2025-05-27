@@ -6,6 +6,8 @@ import SampleView from '@/views/SampleView.vue'
 import LoginView from '@/views/user/LoginView.vue'
 import RegistView from '@/views/user/RegistView.vue'
 import ArticleMasterView from '@/views/article/ArticleMasterView.vue'
+import ArticleSearchView from '@/views/article/ArticleSearchView.vue'
+import ArticleEditNyamView from '@/views/article/ArticleEditNyamView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 import MyPageView from '@/views/user/MyPageView.vue'
@@ -31,6 +33,18 @@ const router = createRouter({
       path: '/article/:id',
       name: 'ArticleMaster',
       component: ArticleMasterView,
+      
+    },
+    {
+      path: '/article/:id/editnyam',
+      name: 'ArticleEditNyam',
+      component: ArticleEditNyamView,
+      
+    },
+    {
+      path: '/search',
+      name: 'ArticleSearch',
+      component: ArticleSearchView,
     },
     {
       path: '/write/nyam',

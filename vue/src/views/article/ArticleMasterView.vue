@@ -9,41 +9,54 @@
                     <p class="category" v-else>레시피</p>
                 </div>
             </div>
-            <div class="img-box">
+            <div class="img-box" @click="openModal(article.imageUrl)">
                 <img :src="article.imageUrl" alt="Article Image"/>
             </div>
             <div class="content-box" v-if="article.content">
                 <pre>{{ article.content }}</pre>
+            </div>
+            <div class="ingredient-box" v-if="article.type == 'recipe'">
+                <div class="label"><span>재료</span></div>
+                <div class="ingredient">
+                    <pre>{{article.ingredient}}</pre>
+                </div>
             </div>
             <div class="detail-box">
                 <template v-for="sub in subArticle" :key="sub.id">
                     <ArticleDetailComp :sub="sub"></ArticleDetailComp>
                 </template>
             </div>
-            <div class="button-box">
-                <a class="fav" href="">
-                    <img src="../../assets/icon/heart-fill.svg"/>
-                </a>
-                <span>20</span>
-                <a class="fav" href="">
-                    <img src="../../assets/icon/heart.svg"/>
-                </a>
-                <span>20</span>
-                <a href=""><img src="../../assets/icon/comment.svg"/></a>
-                <a onclick=""><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></a>
+            <div class="bottom-botton d-flex justify-content-between">
+                <div class="button-box">
+                    <div :class="{dislike:isLike,like:!isLike}" @click="like">
+                        <img/>
+                        <span>{{article.likeCount}}</span>
+                    </div>
+                    <div class="comment" @click="toComment"><img src="../../assets/icon/comment.svg"/></div>
+                    <div class="share" @click="share"><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></div>
+                </div>
+                <div class="writer-botton">
+                    <button class="btn btn-secondary" @click="goUpdate">수정</button>
+                    <button class="btn btn-warning" @click="doDelete">삭제</button>
+                </div>
             </div>
         </div>
         <ArticleCommentComp :article-id="Number(articleId)" :comment="comment"></ArticleCommentComp>
     </div>
+    <BToast ref="toast" id="toast" class="bottom-0 end-0 m-3 position-fixed toast hide p-2" auto-hide-delay="500">
+        클립보드에 복사되었습니다!
+    </BToast>
 </template>
 
 <script setup>
     import axios from 'axios';
-    import { ref,onMounted } from 'vue';
+    import { ref,onMounted,watch } from 'vue';
     import { useRouter,useRoute } from 'vue-router';
     import ArticleDetailComp from '@/components/article/ArticleDetailComp.vue';
     import ArticleCommentComp from '@/components/article/ArticleCommentComp.vue';
-import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
+    import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
+    import { BToast,BInputGroup, BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
+    import { useImageStore } from '@/stores/image.js';
     const article = ref({});
     const subArticle = ref([]);
     const comment = ref([]);
@@ -52,13 +65,54 @@ import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
     const router = useRouter();
     const route = useRoute();
     const articleId = route.params.id;
+    const image = useImageStore();
+    const isWriter = ref(false);
+    const sessionUser = JSON.parse(localStorage.getItem('user'));
     const profile = () => {
         router.push({
             name: 'profile',
             params: { userId: article.value.userId }
         });
     };
+    const openModal = (url) => {
+        image.openModal(url);
+    };
+    const toast = ref(null);
+
+    const doDelete = () => {
+        if (confirm('정말로 삭제하시겠습니까?')) {
+            axios.delete(url + '/article/' + articleId)
+            .then(res => {
+                alert('삭제되었습니다.');
+                router.push('/');
+            })
+            .catch(err => {
+                console.error(err);
+                alert('삭제에 실패했습니다.');
+            });
+        }
+    };
+
+    const goUpdate = () => {
+        if (article.value.type === 'recipe') {
+            router.push({
+                name: 'ArticleEditRecipe',
+                params: { id: articleId }
+            });
+        } else {
+            router.push({
+                name: 'ArticleEditNyam',
+                params: { id: articleId }
+            });
+        }
+    };
+
     onMounted(async () => {
+        if (route.query.comment) {
+            setTimeout(() => {
+                toComment();
+            }, 300);
+        }
         try {
             const response = await axios.get(url + '/article/' + articleId);
             response.data.article.imageUrl = imageUrl + response.data.article.imageUrl;
@@ -79,12 +133,72 @@ import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
             });
             subArticle.value = response.data.subArticle;
             comment.value = response.data.comment;
+            isLike.value = article.value.isLike === 'true';
+            isWriter.value = sessionUser && sessionUser.id === article.value.userId;
         } catch (error) {
             console.error('Error fetching articles:', error);
             alert('유효하지 않은 접근입니다.');
             router.push('/');
         }
     });
+    const isLike = ref(false);
+
+    watch(() => article.value.isLike, (newVal) => {
+        isLike.value = newVal === 'true';
+    });
+
+    
+    const like = () => {
+        
+        const likeurl = import.meta.env.VITE_API_URL + `/article/${article.value.id}/like`;
+        if (isLike.value) {
+            axios.delete(likeurl)
+            .then(res => {
+                article.value.isLike = 'false';
+                article.value.likeCount--;
+            })
+            .catch(err => {
+                console.error(err); 
+            })
+        } else {
+            axios.put(likeurl)
+            .then(res => {
+                article.value.isLike = 'true';
+                article.value.likeCount++;
+            })
+            .catch(err => {
+                console.error(err); 
+            })
+        }
+    };
+    const toComment = () => {
+        const commentSection = document.querySelector('#comment');
+        if (commentSection) {
+            commentSection.scrollIntoView({ behavior: 'smooth' });
+            commentSection.focus();
+        }
+    };
+    const share = () => {
+        const shareUrl = `${window.location.origin}/article/${articleId}`;
+        if (navigator.share) {
+            navigator.share({
+                title: 'Check out this article!',
+                url: shareUrl
+            }).then(() => {
+                console.log('Share successful');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            navigator.clipboard.writeText(shareUrl)
+            .then(() => {
+                toast.value.show();
+                setTimeout(() => {
+                    toast.value.hide();
+                }, timeout = 800);
+            })
+        }
+    };
 </script>
 
 <style scoped>
@@ -111,5 +225,64 @@ import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
         padding: 10px;
         border: #AAA solid 1px;
         margin-bottom: 50px;
+    }
+
+    .like,.dislike,.comment,.share {
+        cursor: pointer;
+    }
+
+    .like img {
+        content: url('../../assets/icon/heart.svg');
+        border: none;
+    }
+
+    .dislike img {
+        content: url('../../assets/icon/heart-fill.svg');
+        border: none;
+    }
+
+    .ingredient-box {
+        display: flex;
+        min-height: 60px;
+    }
+
+    .label {
+        font-weight: bold;
+        width: 50px;
+        background-color: #AAA;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+    }
+    .label span {
+        margin-left: 10px;
+    }
+    .ingredient {
+        flex: 1;
+        padding: 10px;
+        border: #AAA solid 1px;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        overflow-y: auto;
+    }
+    .img-box {
+        cursor:pointer
+    }
+    .bottom-botton {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .button-box {
+        display: flex;
+        align-items: center;
+    }
+    .writer-botton {
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 </style>   

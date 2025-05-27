@@ -8,7 +8,10 @@
                         <span class="text-black ms-1 font3" style="font-size: 30px;">냠냠로드</span>
                     </div>
                 </a>
-                <div id="searchBox" class="col-5 position-absolute translate-middle-x" style="left:50%">
+                <div id="searchBox" class="col-5 position-absolute translate-middle-x" style="left:50%" @keypress="(event) => {
+                    if (event.key === 'Enter') {
+                        search();
+                    }}">
                     <BInputGroup class="w-100">
                         <BFormSelect v-model="searchOption" :options="options" style="flex: 0 0 150px;"></BFormSelect>
                         <BFormInput/>
@@ -57,24 +60,30 @@
     import axios from 'axios';
 
     const userStore = useUserStore();
-
+    const router = useRouter();
+    
     onMounted(()=>{
         userStore.getUserInfo();
     })
 
     const image_url = import.meta.env.VITE_IMAGE_URL;
     const user = ref(JSON.parse(sessionStorage.getItem("user")))
-
     const searchOption = ref('recipe');
     const options = ref([
         { value: 'recipe', text: '레시피' },
-        { value: 'nyam', text: '냠냠' },
+        { value: 'eat', text: '냠냠' },
         { value: 'user', text: '사용자' }
     ]);
-
     const search = () => {
-        // 검색 로직 구현
-        console.log(`Searching for ${searchOption.value}`);
+        const keyword = document.querySelector('#searchBox input').value.trim();
+        const type = searchOption.value;
+        router.push({
+            name: 'ArticleSearch',
+            query: {
+                keyword: keyword,
+                type: type
+            }
+        });
     }
 
     const logout = async function(){

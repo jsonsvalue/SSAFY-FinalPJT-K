@@ -1,17 +1,30 @@
 <template>
   <div class="h-100 d-flex flex-column">
     <HeaderComp/>
+
     <RouterView :key = "$route.fullPath"/>
+    <ImageModalComp ref="imageModal"/>
+
   </div>
 </template>
 
 <script setup>
   import axios from "axios";
-import { onBeforeMount } from 'vue';
-import HeaderComp from './components/HeaderComp.vue';
-import router from './router';
+  import { onBeforeMount,ref,onMounted } from 'vue';
+  import HeaderComp from './components/HeaderComp.vue';
+  import ImageModalComp from './components/common/ImageModalComp.vue';
+  import router from './router';
+  import { useImageStore } from './stores/image.js';
 
   const REST_API_URL = import.meta.env.VITE_API_URL;
+
+  const image = useImageStore();
+  const imageModal = ref(null);
+
+  onMounted(() => {
+    image.setModal(imageModal.value);
+  });
+
   // 비동기 함수를 선언하는 asyc를 이용하면 promise를 반환한다.
   // 그래서 await를 써서 promise가 반환될때까지 기다리면, 비동기 함수를 동기함수처럼 쓸 수 있는 것이다.
   onBeforeMount(async() => {
@@ -25,7 +38,6 @@ import router from './router';
       const response = await axios.get(`${REST_API_URL}/getUserInfo`,{
         withCredentials : true
       });
-      console.log("App.vue", response.data);
       
       // sessionStorage에 user의 데이터를 json 형태 데이터로 저장한다.
       const userData = JSON.stringify(response.data);
@@ -39,6 +51,8 @@ import router from './router';
     }
 
   });
+
+  
 </script>
 
 <style module>

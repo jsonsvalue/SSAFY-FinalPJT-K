@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="outline">
-            <h3>냠냠 작성</h3>
+            <h3>냠냠 수정</h3>
             <div class="write-form">
                 <BInputGroup class="mb-3 content">
                     <BInputGroupText>내용</BInputGroupText>
@@ -17,7 +17,7 @@
             </div>
             <ArticleMapComp></ArticleMapComp>
             <div class="button-box">
-                <BButton variant="primary" @click="submitArticle">작성하기</BButton>
+                <BButton variant="primary" @click="saveArticle">저장</BButton>
                 <BButton variant="secondary" @click="$router.push('/')">취소</BButton>
             </div>
         </div>
@@ -26,15 +26,17 @@
 
 <script setup>
     import ArticleMapComp from '@/components/article/ArticleMapComp.vue';
-    import { BFormInput, BButton,BInputGroup,BFormText,BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
-    import { ref, watch } from 'vue';
+    import { BButton,BInputGroup,BFormText,BInputGroupText,BFormTextarea } from 'bootstrap-vue-next';
+    import { onMounted, ref, watch } from 'vue';
     import ImageUploadComp from '@/components/common/ImageUploadComp.vue';
     import ArticleWriteDetailComp from '@/components/article/ArticleWriteDetailComp.vue';
     import axios from 'axios';
-    import { useRouter } from 'vue-router';
+    import { useRouter,useRoute} from 'vue-router';
     const router = useRouter();
     const url = import.meta.env.VITE_API_URL + '/article';
-
+    const imageUrl = import.meta.env.VITE_IMAGE_URL;
+    const route = useRoute();
+    const articleId = route.params.id;
     const article = ref({
         id: null,
         userId: null,
@@ -65,7 +67,7 @@
         });
     }
 
-    const submitArticle = () => {
+    const saveArticle = () => {
         const params = {
             article: article.value,
             subArticle: subArticle.value
@@ -104,6 +106,38 @@
             orderSubArticle();
         }
     }
+
+    onMounted(async () => {
+        if (route.query.comment) {
+            setTimeout(() => {
+                toComment();
+            }, 300);
+        }
+        try {
+            const response = await axios.get(url + '/' + articleId);
+            response.data.article.imageUrl = imageUrl + response.data.article.imageUrl;
+            article.value = response.data.article;
+            response.data.subArticle.forEach((sub) => {
+                if (sub.imageUrl) {
+                    sub.imageUrl = imageUrl + sub.imageUrl;
+                } else {
+                    sub.imageUrl = null;
+                }
+            });
+            response.data.comment.forEach((comm) => {
+                if (comm.imageUrl) {
+                    comm.imageUrl = imageUrl + comm.imageUrl;
+                } else {
+                    comm.imageUrl = null;
+                }
+            });
+            subArticle.value = response.data.subArticle;
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+            alert('유효하지 않은 접근입니다.');
+            router.push('/');
+        }
+    });
 </script>
 
 <style scoped>

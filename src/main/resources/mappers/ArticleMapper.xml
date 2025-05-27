@@ -32,7 +32,7 @@
 		)
 	</insert>
 	
-	<select id="selectArticleMaster" resultType="ArticleMaster">
+	<select id="selectArticleMaster" resultType="ArticleMaster" parameterType="Map">
 		SELECT a.id
 		     , a.user_id
 		     , u.name as user_name
@@ -41,24 +41,47 @@
 		     , a.content
 		     , a.ingredient
 		     , i.org_file as image_url
+		     , a.like_count
+		  <if test="sessionId != null and sessionId != ''">
+		     , CASE
+		     	WHEN l.user_id IS NULL THEN 'false'
+		     	ELSE 'true'
+		       END AS is_like
+		  </if>
 		  FROM article_master a
+		  <if test="sessionId != null and sessionId != ''">
+		  LEFT OUTER JOIN article_like l on a.id = l.article_id
+	  	   AND #{sessionId} = l.user_id
+		  </if>
 		     , image i
 		     , user u
-		 WHERE a.id = #{id}
+		 WHERE a.id = #{articleId}
 		   AND a.image_id = i.id
 		   AND a.use_yn = 'Y'
 		   AND a.user_id = u.user_id
 	</select>
 	
-	<select id="selectArticleMasterAll" resultType="ArticleMaster">
+	<select id="selectArticleMasterAll" resultType="ArticleMaster" parameterType="String">
 		SELECT a.id
 		     , a.user_id
 		     , u.name as user_name
 		     , ui.org_file as user_image
 		     , a.type
+		     , a.content
 		     , a.image_id
 		     , ai.org_file as image_url
-		  FROM article_master a 
+		     , a.like_count
+		  <if test="sessionId != null and sessionId != ''">
+		     , CASE
+		     	WHEN l.user_id IS NULL THEN 'false'
+		     	ELSE 'true'
+		       END AS is_like
+		  </if>
+		  FROM article_master a
+		  <if test="sessionId != null and sessionId != ''">
+		  LEFT OUTER JOIN article_like l on a.id = l.article_id
+		   AND #{sessionId} = l.user_id
+		  </if>
 		     , image ai
 		     , user u
 		  LEFT OUTER JOIN image ui ON ui.ID = u.IMAGE_ID
@@ -78,7 +101,7 @@
 		 WHERE id          = #{id}
 	</update>
 	
-	<update id="deleteArticleMaster" parameterType="int">
+	<update id="deleteArticleMaster" parameterType="Map">
 		UPDATE article_master
 		   SET use_yn = 'N'
 		 WHERE id = #{id}
@@ -148,56 +171,89 @@
 		 ORDER BY c.rgst_dttm asc;
 	</select>
 	
-	<select id="selectArticleRecommend">
-		WITH current_interactions AS (
-		  -- 현재 사용자가 좋아요 또는 댓글로 상호작용한 게시물 목록
+	<insert id="insertArticleLike" parameterType="Map">
+		INSERT INTO article_like (
+			article_id
+		  , user_id
+		) VALUES (
+			#{articleId}
+		  , #{sessionId}
+		)
+	</insert>
+	
+	<delete id="deleteArticleLike" parameterType="Map">
+		DELETE FROM article_like
+		 WHERE article_id = #{articleId}
+		   AND user_id = #{sessionId}
+	</delete>
+	
+	<update id="incArticleLike" parameterType="int">
+		UPDATE article_master
+		   SET like_count = like_count+1
+		 WHERE id=#{id}
+	</update>
+	
+	<update id="decArticleLike" parameterType="int">
+		UPDATE article_master
+		   SET like_count = like_count-1
+		 WHERE id=#{id}
+	</update>
+	
+	<select id="getFeed" parameterType="Map" resultType="ArticleMaster">
+		  WITH current_interactions AS (
+		  /* 현재 사용자가 좋아요 또는 댓글로 상호작용한 게시물 목록 */
 		  SELECT article_id 
 		  FROM article_like 
-		  WHERE user_id = #{user_id} AND use_yn = 'Y'
+		  WHERE user_id = #{sessionId} AND use_yn = 'Y'
 		  UNION
-		  SELECT article_id 
-		  FROM article_comment 
-		  WHERE user_id = #{user_id} AND use_yn = 'Y'
+		  SELECT article_id
+		  FROM article_comment
+		  WHERE user_id = #{sessionId} AND use_yn = 'Y'
 		),
 		similar_users AS (
-		  -- 현재 사용자가 상호작용한 게시물에 대해, 다른 사용자들이 남긴 행동으로 유사 사용자 도출
+		  -- 현재 사용자가 상호작용한 게시물에 대해, 다른 사용자들의 행동을 통해 유사 사용자 도출
 		  SELECT DISTINCT user_id
 		  FROM (
 		    SELECT user_id 
 		    FROM article_like 
 		    WHERE article_id IN (SELECT article_id FROM current_interactions)
-		      AND user_id != #{user_id}
+		      AND user_id != #{sessionId}
 		      AND use_yn = 'Y'
 		    UNION
 		    SELECT user_id 
 		    FROM article_comment 
 		    WHERE article_id IN (SELECT article_id FROM current_interactions)
-		      AND user_id != #{user_id}
+		      AND user_id != #{sessionId}
 		      AND use_yn = 'Y'
 		  ) AS sim
 		),
 		candidate_interactions AS (
+		  -- 유사 사용자가 남긴 행동 중, 현재 사용자가 이미 상호작용하지 않은 게시물 선택
 		  SELECT article_id, 1 AS weight
 		  FROM article_like
 		  WHERE user_id IN (SELECT user_id FROM similar_users)
 		    AND article_id NOT IN (SELECT article_id FROM current_interactions)
 		    AND use_yn = 'Y'
 		  UNION ALL
-		  SELECT article_id, 1 AS weight  -- 댓글의 경우 필요시 가중치를 다르게 줄 수 있음 (예: 2)
+		  SELECT article_id, 1 AS weight  -- 댓글의 경우 (필요시 가중치를 달리 설정할 수 있음)
 		  FROM article_comment
 		  WHERE user_id IN (SELECT user_id FROM similar_users)
 		    AND article_id NOT IN (SELECT article_id FROM current_interactions)
 		    AND use_yn = 'Y'
 		),
 		candidate_result AS (
+		  -- 후보 게시물에 대해 추천 점수(score)를 산출 (유사 사용자 행동 기반) 및 페이지네이션 처리
 		  SELECT am.*, SUM(ci.weight) AS score
 		  FROM candidate_interactions ci
 		  JOIN article_master am ON am.id = ci.article_id
-		  WHERE am.use_yn = 'Y' 
-		    AND am.id <![CDATA[<]]> #{top_id}
+		  WHERE am.use_yn = 'Y'
+		  <if test="top != 0">
+		    AND am.id <![CDATA[<]]> #{top}
+		  </if>
 		  GROUP BY ci.article_id
 		),
 		fallback_popular AS (
+		  -- 후보 결과가 없을 경우 보여줄 인기 게시물 (좋아요 + 댓글 수 기반)
 		  SELECT am.*, (am.like_count + IFNULL(ac.comment_count, 0)) AS score
 		  FROM article_master am
 		  LEFT JOIN (
@@ -207,14 +263,91 @@
 		      GROUP BY article_id
 		  ) ac ON am.id = ac.article_id
 		  WHERE am.use_yn = 'Y'
-		    AND am.id <![CDATA[<]]> #{top_id}
+		  <if test="top != 0">
+		    AND am.id <![CDATA[<]]> #{top}
+		  </if>
 		  ORDER BY am.id DESC
-		  LIMIT 20
+		  LIMIT 3
+		),
+		follow_result AS (
+		  -- 사용자가 팔로우한 계정의 게시물 (추가 점수 부여해 우선순위 상승)
+		  SELECT am.*, (am.like_count + IFNULL(ac.comment_count, 0) + 100) AS score
+		  FROM article_master am
+		  LEFT JOIN (
+		      SELECT article_id, COUNT(*) AS comment_count
+		      FROM article_comment
+		      WHERE use_yn = 'Y'
+		      GROUP BY article_id
+		  ) ac ON am.id = ac.article_id
+		  WHERE am.use_yn = 'Y'
+		    AND am.user_id IN (SELECT follow_id FROM follow WHERE user_id = #{sessionId} AND use_yn = 'Y')
+		  <if test="top != 0">
+		    AND am.id <![CDATA[<]]> #{top}
+		  </if>
+		),
+		final_candidates AS (
+		  -- 유사 추천과 팔로우 게시물 모두 존재하면 두 결과를 합하고,
+		  -- 둘 다 없을 경우 fallback_popular을 사용
+		  SELECT * FROM candidate_result
+		  UNION ALL
+		  SELECT * FROM follow_result
+		  UNION ALL
+		  SELECT * FROM fallback_popular
+		  WHERE NOT EXISTS (SELECT 1 FROM candidate_result)
+		    AND NOT EXISTS (SELECT 1 FROM follow_result)
 		)
-		SELECT * FROM candidate_result
-		UNION ALL
-		SELECT * FROM fallback_popular
-		WHERE NOT EXISTS (SELECT 1 FROM candidate_result)
-		ORDER BY id DESC;
+		SELECT 
+		    a.id,
+		    a.user_id,
+		    u.name AS user_name,
+		    ui.org_file AS user_image,  -- 사용자 프로필 사진 (user의 image_id 기준)
+		    a.type,
+		    a.content,
+		    a.image_id,
+		    ai.org_file AS image_url,   -- 게시글에 연결된 이미지 URL
+		    a.like_count,
+		    <if test="sessionId != null and sessionId != ''">
+		        CASE WHEN l.user_id IS NULL THEN 'false' ELSE 'true' END AS is_like,
+		    </if>
+		    a.score
+		FROM final_candidates a
+		JOIN user u ON a.user_id = u.user_id
+		JOIN image ai ON a.image_id = ai.id
+		LEFT JOIN image ui ON ui.id = u.image_id
+		<if test="sessionId != null and sessionId != ''">
+		  LEFT JOIN article_like l ON a.id = l.article_id AND l.user_id = #{sessionId}
+		</if>
+		ORDER BY a.id DESC;
+	</select>
+
+	<select id="searchArticle" resultType="ArticleMaster" parameterType="Map">
+		SELECT a.id
+		     , a.user_id
+		     , u.name as user_name
+		     , a.type
+		     , a.image_id
+		     , a.content
+		     , a.ingredient
+		     , i.org_file as image_url
+		  FROM article_master a
+		     , image i
+		     , user u
+		 WHERE a.image_id = i.id
+		   AND a.user_id = u.user_id
+		   AND a.use_yn = 'Y'
+		   AND a.type = #{type}
+	   <if test="top != 0">
+		   AND id <![CDATA[<]]> #{top}
+	   </if>
+		   
+	   <if test="type == 'recipe'">
+	   	   AND (a.content LIKE CONCAT('%', #{keyword}, '%')
+			OR a.ingredient LIKE CONCAT('%', #{keyword}, '%'))
+	   </if>
+	   <if test="type != 'recipe'">
+	   	   AND a.content LIKE CONCAT('%', #{keyword}, '%')
+	   </if>
+		 ORDER BY a.rgst_dttm DESC
+		 LIMIT 5;
 	</select>
 </mapper>
