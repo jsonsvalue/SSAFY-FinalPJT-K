@@ -26,7 +26,7 @@ export const useUserStore = defineStore("user", ()=>{
     axios.get(`${REST_API_URL}/profile/${userId}`)
     .then((response)=>{
       userInfo.value = response.data;
-      // console.log("Get Profile Info", response.data);
+      console.log("Get Profile Info", response.data);
     }).catch((err)=>{
       console.log(err);
     })    
@@ -106,7 +106,7 @@ export const useUserStore = defineStore("user", ()=>{
     // 로그인 성공 시 session Storage에 해당 정보 저장하고,
     // 다른 페이지로 이동한다.
     .then((response)=>{
-      console.log(response);
+      console.log("Successfully Logged in", response);
 
       const userData = response.data;
       sessionStorage.setItem("user", JSON.stringify(userData));

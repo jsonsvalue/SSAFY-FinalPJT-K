@@ -35,4 +35,12 @@ public class FollowServiceImpl implements FollowService{
 		return followerList;
 	}
 
+	@Override
+	public boolean unfollowUser(String userId, String followId) {
+		int result = followDao.unfollow(userId, followId);
+				
+		return result > 0;
+	}
+	
+	
 }

@@ -1,8 +1,10 @@
 <template>
   <div class="h-100 d-flex flex-column">
     <HeaderComp/>
-    <RouterView/>
+
+    <RouterView :key = "$route.fullPath"/>
     <ImageModalComp ref="imageModal"/>
+
   </div>
 </template>
 
@@ -36,6 +38,11 @@
       const response = await axios.get(`${REST_API_URL}/getUserInfo`,{
         withCredentials : true
       });
+      
+      // sessionStorage에 user의 데이터를 json 형태 데이터로 저장한다.
+      const userData = JSON.stringify(response.data);
+      sessionStorage.setItem("user", userData);
+
       router.push('');
     }catch(error){
       console.log(error);

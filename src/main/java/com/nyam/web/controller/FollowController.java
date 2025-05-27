@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,8 +66,18 @@ public class FollowController {
 		
 	}
 	
-	
-	
+	@DeleteMapping("/unfollow/{userId}")
+	public ResponseEntity<?> unfollowUser(@PathVariable("userId")String userId, @RequestParam("followId") String followId){
+		
+		boolean result = followService.unfollowUser(userId, followId);
+		
+		if(result) {
+			return ResponseEntity.status(HttpStatus.OK).body("Follower successfully unfollowed");
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error in unfollowing user");
+		}
+	}
+  	
 	
 	
 }

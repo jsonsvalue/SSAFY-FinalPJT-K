@@ -9,6 +9,26 @@ export const useFollowStore = defineStore("follow", ()=>{
     const followList = ref(null);
     const followerList = ref(null);
 
+    const unfollowUser = function(userId, followId){
+        axios.delete(`${REST_API_URL}/unfollow/${userId}?followId=${followId}`, userId, followId)
+        .then((response)=>{
+            console.log(response.data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
+
+    const followUser = function(userId, followId){
+        axios.post(`${REST_API_URL}/follow/${userId}?followId=${followId}`, userId, followId)
+        .then((response)=>{
+            console.log(response.data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }
+
     const getFollowList = function(userId){
         axios.get(`${REST_API_URL}/follow/getFollow/${userId}`)
         .then((response)=>{
@@ -32,5 +52,5 @@ export const useFollowStore = defineStore("follow", ()=>{
         })
     }
 
-    return {followList, followerList, getFollowList, getFollowerList};
+    return {followList, followerList, getFollowList, getFollowerList, followUser, unfollowUser};
 })

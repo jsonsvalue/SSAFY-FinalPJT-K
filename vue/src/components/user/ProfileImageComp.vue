@@ -1,11 +1,14 @@
 <template>
-    <img ref="img" @error="noImage" :alt="alt" :class=props.class @click="click" style="cursor: pointer"/>
+    <RouterLink :to="{name:'profile',params :{userId:props.userId}}">
+        <img ref="img" @error="noImage" :alt="alt" :class=props.class class="profile-image" />
+    </RouterLink>
 </template>
 
 <script setup>
     import router from '@/router';
-import { ref,defineProps } from 'vue';
+    import { ref,defineProps } from 'vue';
     import { onMounted } from 'vue';
+    const image_url = import.meta.env.VITE_IMAGE_URL;
     const noImage = (event) => {
         img.value.src = "/src/assets/icon/no-image.svg";
     };
@@ -34,13 +37,26 @@ import { ref,defineProps } from 'vue';
             default: 'profile-image'
         }
     });
-    onMounted(() => {
-        if (props.src != null && props.src.indexOf('undefined') != -1) {
-            img.value.src = props.src;
+    onMounted(() => {        
+        if (props.src&& props.src.indexOf('undefined') == -1) {
+            if(props.src.indexOf('http') == -1){
+                img.value.src = image_url + props.src;
+            }else{
+                img.value.src = props.src;
+            }
         }
     });
 </script>
 
 <style scoped>
+    .profile-image {
+        max-height:50px;
+        cursor:pointer;
+        width: 100%;
+        height: 100%; 
+        border-radius: 50%;
+        object-fit : cover;
+    }
 
+    
 </style>

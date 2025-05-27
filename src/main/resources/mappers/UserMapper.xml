@@ -4,9 +4,19 @@
 <mapper namespace="com.nyam.model.dao.UserDao">
 	
 	<select id="selectByuserId" parameterType = "String">
-		SELECT *
-		FROM user
-		WHERE user_id = #{userId} AND use_yn = 'Y'
+		SELECT 
+			  u.user_id
+			, u.name
+			, u.email
+			, u.password
+			, u.role
+			, u.intro
+			, u.feed_type
+			, i.id as image_id
+			, i.org_file as image_url		
+		FROM user u
+		LEFT OUTER JOIN image i ON u.image_id = i.id
+		WHERE u.user_id = #{userId} AND u.use_yn = 'Y'
 		;
 	</select>
 	
@@ -45,6 +55,7 @@
 			<if test = "password != null">password = #{password},</if>
 			<if test = "intro != null">intro = #{intro},</if>
 			<if test = "feedType != null">feed_type = #{feedType},</if>
+			<if test = "imageId != null">image_id = #{imageId},</if>
 			mdfc_dttm = now()
 		</set>
 		WHERE user_id = #{userId} AND use_yn = 'Y'

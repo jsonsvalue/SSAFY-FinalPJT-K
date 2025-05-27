@@ -99,6 +99,12 @@
         if (box.value.offsetWidth <= 300) {
             box.value.classList.add('small-box')
         }
+        if (props.image.imageUrl&&props.image.imageUrl.indexOf('http') === -1) {
+            props.image.imageUrl = resourceUrl + props.image.imageUrl
+        }
+        if (props.image.imageUrl) {
+            isEmpty.value = false;
+        }
     })
 </script>
 
@@ -119,6 +125,7 @@
         justify-content: center;
         width: 100%;
         height: 100%;
+        min-height: inherit;
         border: 2px dashed #999;
         border-radius: 10px;
         background-color: #f9f9f9;
@@ -131,6 +138,7 @@
         justify-content: center;
         width: 100%;
         height: 100%;
+        min-height: inherit;
         border-radius: 15px;
         background-color: #DDD;
         position: relative;

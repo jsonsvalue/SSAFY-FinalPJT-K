@@ -77,7 +77,7 @@
         <b-tab @click = "selectedType = 'eat'">
           <template #title>
             <i class="far fa-bookmark me-1"></i>
-            식당
+            냠냠
           </template>
         </b-tab>
         
@@ -99,7 +99,7 @@
             :key = article.id
             cols="4"
             class="p-1">
-        >    
+            
             <!-- 
               @click="articleStore.selectArticle(article.id)"
               "
@@ -134,6 +134,7 @@
         <div>{{ userId }}</div>
         
     </div> -->
+  
 </template>
 
 <script setup>
@@ -144,10 +145,12 @@
     import { useArticleStore} from '@/stores/article';
     import { ref, onMounted, computed } from 'vue';
     import { BButton, BTabs, BTab, BRow, BCol } from 'bootstrap-vue-next';
+    
 
     const imageUrl = import.meta.env.VITE_IMAGE_URL;
     const route = useRoute();
     const userId = ref('');
+
 
     // 페이지가 rendering 되면서 Path에 있는 userInfo 정보를 가져온다.
     // 그리고 Path에 있는 정보를 getProfileInfo를 통해 GET 요청을 보낸다.
@@ -173,6 +176,11 @@
 </script>
 
 <style scoped>
+.photo-grid *::after,
+.photo-grid *::before {
+  display: none !important;
+}
+
     .profile-container {
   max-width: 50%;
   margin: 0 auto;
@@ -211,7 +219,13 @@
 }
 
 .profile-tabs .nav-tabs {
+  overflow:hidden !important;
+  scrollbar-width: none;
   border-bottom: none;
+}
+
+.profile-tabs .nav-tabs::-webkit-scrollbar {
+  display: none; 
 }
 
 .profile-tabs .nav-link {
@@ -303,4 +317,6 @@ h5, h6 {
 .text-muted {
   color: #8e8e8e !important;
 }
+
+
 </style>
