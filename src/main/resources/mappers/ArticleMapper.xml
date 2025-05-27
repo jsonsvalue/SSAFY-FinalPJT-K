@@ -32,6 +32,21 @@
 		)
 	</insert>
 	
+	<update id="updateArticleDetail" parameterType="ArticleDetail">
+		UPDATE article_detail
+		   SET `order`    = #{order}
+		     , image_id   = #{imageId}
+		     , content    = #{content}
+		     , mdfc_dttm  = now()
+		 WHERE article_id = #{articleId}
+	</update>
+	
+	<update id="deleteArticleDetail" parameterType="int">
+		UPDATE article_detail
+		   SET use_yn = 'N'
+		 WHERE article_id = #{articleId}
+	</update>
+	
 	<select id="selectArticleMaster" resultType="ArticleMaster" parameterType="Map">
 		SELECT a.id
 		     , a.user_id
@@ -61,36 +76,6 @@
 		   AND a.user_id = u.user_id
 	</select>
 	
-	<select id="selectArticleMasterAll" resultType="ArticleMaster" parameterType="String">
-		SELECT a.id
-		     , a.user_id
-		     , u.name as user_name
-		     , ui.org_file as user_image
-		     , a.type
-		     , a.content
-		     , a.image_id
-		     , ai.org_file as image_url
-		     , a.like_count
-		  <if test="sessionId != null and sessionId != ''">
-		     , CASE
-		     	WHEN l.user_id IS NULL THEN 'false'
-		     	ELSE 'true'
-		       END AS is_like
-		  </if>
-		  FROM article_master a
-		  <if test="sessionId != null and sessionId != ''">
-		  LEFT OUTER JOIN article_like l on a.id = l.article_id
-		   AND #{sessionId} = l.user_id
-		  </if>
-		     , image ai
-		     , user u
-		  LEFT OUTER JOIN image ui ON ui.ID = u.IMAGE_ID
-		 WHERE a.image_id = ai.id
-		   AND a.use_yn = 'Y'
-		   AND a.user_id = u.user_id
-		 ORDER BY a.rgst_dttm desc
-	</select>
-	
 	<update id="updateArticleMaster" parameterType="ArticleMaster">
 		UPDATE article_master
 		   SET user_id     = #{userId}
@@ -101,7 +86,7 @@
 		 WHERE id          = #{id}
 	</update>
 	
-	<update id="deleteArticleMaster" parameterType="Map">
+	<update id="deleteArticleMaster" parameterType="int">
 		UPDATE article_master
 		   SET use_yn = 'N'
 		 WHERE id = #{id}
@@ -267,7 +252,7 @@
 		    AND am.id <![CDATA[<]]> #{top}
 		  </if>
 		  ORDER BY am.id DESC
-		  LIMIT 3
+		  LIMIT 5
 		),
 		follow_result AS (
 		  -- 사용자가 팔로우한 계정의 게시물 (추가 점수 부여해 우선순위 상승)
@@ -317,7 +302,8 @@
 		<if test="sessionId != null and sessionId != ''">
 		  LEFT JOIN article_like l ON a.id = l.article_id AND l.user_id = #{sessionId}
 		</if>
-		ORDER BY a.id DESC;
+		ORDER BY a.id DESC
+		LIMIT 5;
 	</select>
 
 	<select id="searchArticle" resultType="ArticleMaster" parameterType="Map">

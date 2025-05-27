@@ -13,7 +13,7 @@ public interface ArticleDao {
 	
 	int updateArticleMaster(ArticleMaster master);
 	
-	int deleteArticleMaster(ArticleMaster master);
+	int deleteArticleMaster(int articleId);
 	
 	ArticleMaster selectArticleMaster(@Param("articleId") int articleId,@Param("sessionId") String sessionId);
 	
