@@ -125,7 +125,6 @@ public class UserController {
 		
 		if(sessUser != null) {
 			session.removeAttribute("loginUser");
-			
 			// return new ResponseEntity<>(null, HttpStatus.OK);
 			return ResponseEntity.status(HttpStatus.OK).body("Logged out Successfully");
 		}else

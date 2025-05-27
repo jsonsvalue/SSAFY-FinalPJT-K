@@ -88,6 +88,7 @@
     // login시 요청을 처리한다.
     const onSubmit = function(){
         store.userLogin(userId.value, password.value);
+        router.go();
     }
 
 

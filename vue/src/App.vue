@@ -1,6 +1,6 @@
 <template>
   <div class="h-100 d-flex flex-column">
-    <HeaderComp/>
+    <HeaderComp v-if = "user"/>
     <RouterView :key = "$route.fullPath"/>
     <ImageModalComp ref="imageModal"/>
 
@@ -17,11 +17,13 @@
 
   const REST_API_URL = import.meta.env.VITE_API_URL;
 
+  const user = ref(JSON.parse(sessionStorage.getItem("user")));
   const image = useImageStore();
   const imageModal = ref(null);
 
   onMounted(() => {
     image.setModal(imageModal.value);
+    
   });
 
   // 비동기 함수를 선언하는 asyc를 이용하면 promise를 반환한다.
