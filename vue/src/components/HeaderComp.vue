@@ -18,8 +18,7 @@
                         <BButton class="btn-success" @click='search'><img src="../assets/icon/search.svg" alt="search" width="30px"></BButton>
                     </BInputGroup>
                 </div>
-                <div id="buttonBox" class="position-absolute col-3 h-100 d-flex align-items-center" style="right: 0%;">
-                    <a><img src="../assets/icon/heart.svg"/></a>
+                <div v-if = "user != null" id="buttonBox" class="position-absolute col-3 h-100 d-flex align-items-center" style="right: 0%;">
                     <!-- <a class="h-50"><img src="../assets/icon/user.svg" class="h-100"/></a> -->
                      <!-- 예시 컴포넌트. 프로필 컴포넌트로 대체해야 함. -->
                     <div style="height: 60%; display: flex; align-items: center; margin-left: 10px;">
