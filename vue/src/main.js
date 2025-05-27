@@ -4,6 +4,7 @@ import router from './router'
 import {createPinia} from 'pinia'
 import { createApp } from 'vue'
 import { createBootstrap } from 'bootstrap-vue-next'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import './assets/custom.css'
 import './assets/style.css'

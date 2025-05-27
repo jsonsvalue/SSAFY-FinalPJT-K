@@ -72,10 +72,10 @@
             article: article.value,
             subArticle: subArticle.value
         }
-        axios.post(url,params)
+        axios.patch(url,params)
         .then(res => {
             console.log(res)
-            router.push(`/article/${res.data}`);
+            router.push(`/article/${article.value.id}`);
         })
         .catch(err => {
             console.error(err); 
