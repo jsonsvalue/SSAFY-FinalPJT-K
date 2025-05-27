@@ -60,7 +60,6 @@
     import axios from 'axios';
 
     const userStore = useUserStore();
-    const router = useRouter();
     
     onMounted(()=>{
         userStore.getUserInfo();
