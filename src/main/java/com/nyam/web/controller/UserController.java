@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nyam.model.dao.UserDao;
 import com.nyam.model.dto.User;
 import com.nyam.model.service.UserService;
 
@@ -31,6 +32,9 @@ public class UserController {
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
+	
+	@Autowired
+	UserDao userDao;
 	
 	@GetMapping("/test")
 	public String test() {
@@ -51,15 +55,23 @@ public class UserController {
 	/**
 	 * 로그인한 사용자의 Session 정보를 갖고 온다.
 	 * **/
+	// 로그인한 user의 정보를 이용해서 DB를 조회하고, 
+	// update된 정보를 session에 반영해준다.
 	@GetMapping("/getUserInfo")
 	public ResponseEntity<?> getUserInfo(HttpSession session){
 		User sessUser = (User)session.getAttribute("loginUser");
+		
+		String loggedInUser = sessUser.getUserId();
+		
+		User updatedUser = userDao.selectByuserId(loggedInUser);
 		
 		if(sessUser != null) {
 			System.out.println("Get Session");
 			System.out.println(session.getId());
 			
-			return new ResponseEntity<User>(sessUser, HttpStatus.OK);
+			session.setAttribute("loginUser", updatedUser);
+			
+			return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
 		}else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("There is no user attributed to the session");
 		}
@@ -108,7 +120,7 @@ public class UserController {
 	
 	// 로그인된 사용자가 있다면, session의 값을 없애준다.
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpSession session, User user){
+	public ResponseEntity<?> logout(HttpSession session){
 		User sessUser = (User)session.getAttribute("loginUser");
 		
 		if(sessUser != null) {

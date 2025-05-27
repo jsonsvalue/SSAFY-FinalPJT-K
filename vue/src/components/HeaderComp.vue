@@ -20,8 +20,26 @@
                     <!-- <a class="h-50"><img src="../assets/icon/user.svg" class="h-100"/></a> -->
                      <!-- 예시 컴포넌트. 프로필 컴포넌트로 대체해야 함. -->
                     <div style="height: 60%; display: flex; align-items: center; margin-left: 10px;">
-                        <img src="../assets/img/hyunwook.png" style="height: 100%; border-radius: 50%;"/>
-                        <p style="font-size: large; margin: 0px 10px 0px;">들들볶는현욱</p>
+                        <!-- <img :src="`${image_url}${user.imageUrl}`" 
+                        style="height: 100%; 
+                        border-radius: 50%;"/> -->
+                        <div style = "width : 50px; height:50px;">
+                            <ProfileImageComp
+                            :src = "user.imageUrl"
+                            :user-id = "user.userId"
+                            >
+                            </ProfileImageComp>
+                        </div>
+                        
+                        
+                        <p style="font-size: large; margin: 0px 10px 0px">
+                            {{user.userId}}
+                        </p>
+
+                        <b-button variant = "secondary" class = "btnClass" @click = "logout">
+                            로그아웃
+                        </b-button>
+
                     </div>
                 </div>
             </div>
@@ -30,8 +48,23 @@
 </template>
 
 <script setup>
-    import { BInputGroup,BFormInput,BButton,BFormSelect,BFormSelectOption } from 'bootstrap-vue-next';
-    import { onBeforeMount, ref } from 'vue';
+    import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
+    import { BInputGroup,BFormInput,BButton,BFormSelect, BFormSelectOption } from 'bootstrap-vue-next';
+    import { onBeforeMount, onMounted, ref } from 'vue';
+    import { useUserStore } from '@/stores/user';
+    import { useRouter} from 'vue-router';
+    import router from '@/router';
+    import axios from 'axios';
+
+    const userStore = useUserStore();
+
+    onMounted(()=>{
+        userStore.getUserInfo();
+    })
+
+    const image_url = import.meta.env.VITE_IMAGE_URL;
+    const user = ref(JSON.parse(sessionStorage.getItem("user")))
+
     const searchOption = ref('recipe');
     const options = ref([
         { value: 'recipe', text: '레시피' },
@@ -42,6 +75,21 @@
     const search = () => {
         // 검색 로직 구현
         console.log(`Searching for ${searchOption.value}`);
+    }
+
+    const logout = async function(){
+        try{
+            // 어차피 Session에 있는 정보를 없애고, 쿠키에서 JSessionId를 가져오는 처리를 해주면 된다.
+            await axios.post('/logout', {}, {withCredentials:true});
+            
+            console.log(response.data);
+        }
+        catch{
+            console.log('로그아웃 실패');
+        }
+
+
+        router.push("/login");
     }
     
     
@@ -54,4 +102,13 @@
     #buttonBox>a>img {
         height: 100%;
     }
+
+    .btnClass{
+        padding: 6px 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+    } 
 </style>

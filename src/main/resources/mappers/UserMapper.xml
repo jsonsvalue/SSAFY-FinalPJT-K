@@ -55,6 +55,7 @@
 			<if test = "password != null">password = #{password},</if>
 			<if test = "intro != null">intro = #{intro},</if>
 			<if test = "feedType != null">feed_type = #{feedType},</if>
+			<if test = "imageId != null">image_id = #{imageId},</if>
 			mdfc_dttm = now()
 		</set>
 		WHERE user_id = #{userId} AND use_yn = 'Y'

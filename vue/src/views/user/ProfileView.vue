@@ -134,6 +134,7 @@
         <div>{{ userId }}</div>
         
     </div> -->
+  
 </template>
 
 <script setup>
@@ -144,10 +145,12 @@
     import { useArticleStore} from '@/stores/article';
     import { ref, onMounted, computed } from 'vue';
     import { BButton, BTabs, BTab, BRow, BCol } from 'bootstrap-vue-next';
+    
 
     const imageUrl = import.meta.env.VITE_IMAGE_URL;
     const route = useRoute();
     const userId = ref('');
+
 
     // 페이지가 rendering 되면서 Path에 있는 userInfo 정보를 가져온다.
     // 그리고 Path에 있는 정보를 getProfileInfo를 통해 GET 요청을 보낸다.

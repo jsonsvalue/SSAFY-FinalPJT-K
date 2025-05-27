@@ -14,12 +14,13 @@
       </ProfileImageComp> -->
 
       <!-- Profile Section -->
+       <!-- :src= "`${imageUrl}${user.imageUrl}`|| defaultImage"  -->
       <div class="bg-light p-3">
         <div class="bg-white rounded-3 p-3 d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center">
             <div class="position-relative me-3">
               <img 
-                :src= "`${imageUrl}${store.userInfo?.imageUrl}`|| defaultImage"  
+                 :src= "`${imageUrl}${store.userInfo?.imageUrl}` || defaultImage"  
                 alt="Profile" 
                 class="rounded-circle"
                 style="width: 60px; height: 60px; object-fit: cover"
@@ -41,7 +42,7 @@
           variant="primary" 
           size="sm" 
           class="rounded-pill px-3"
-          @click = "update"
+          @click = "updateImage"
           >
             사진 변경
           </b-button>
@@ -140,7 +141,7 @@
                   class="rounded-pill px-3"
                   @click = "deleteAccount">
                   탈퇴
-            </b-button>
+              </b-button>
 
                 
             </div>
@@ -169,32 +170,29 @@
           </div>
         </div>
       </div> -->
-
     </div>
 
     
   </div>
-
     <!--  <div>
-        <h1>
-            My page
-        </h1>
-        
         axios가 비동기 처리이기 때문에 UserInfo가 Rendering되고 나면,
         template이 rendering 될 때 userInfo = null 값일때 실행 안되게 조건문을 걸고 Rendering한다.
-
         <div v-if="store.userInfo">
             <h2 >{{ store.userInfo.userId }}</h2>
-            <h2>{{ store.userInfo.name }}</h2>
-            <h2>{{ store.userInfo.imageUrl }}</h2>
-            <h2>{{ store.userInfo.email }}</h2>
-            <h2>{{ store.userInfo.feedType}}</h2>
-            <h2>{{ store.userInfo.intro }}</h2>
-        </div>    
-
-    
+        </div>        
     </div>-->
     
+    <BModal id="editProfileModal" title="프로필 편집" size="lg" v-model="modalShow">
+          <image-upload-comp style="min-height: 250px;"
+          :ref="imageUpload" :image="editableImage" @onFileUpload = "receiveFileUpload"
+          >
+          </image-upload-comp>
+
+        <template #footer>
+            <b-button variant="primary" @click="updateUserPicture">수정</b-button>
+            <b-button variant="secondary" @click="modalShow = false">닫기</b-button>
+        </template>
+    </BModal>
 
     
 </template>
@@ -204,17 +202,78 @@
     import ProfileImageComp from '@/components/user/ProfileImageComp.vue';
     import {  BFormInput, BFormTextarea, BFormCheckbox, BFormSelect, BButton} from 'bootstrap-vue-next';
     import { useUserStore } from '@/stores/user';
-    import { useRoute } from 'vue-router';
+    import { useRoute,useRouter } from 'vue-router';
     import {ref, computed, onMounted} from 'vue';
     import profileDefault from '@/assets/img/profile.png'
+    import {BModal} from 'bootstrap-vue-next';
+    import axios from 'axios';
+    
+    const REST_API_URL = import.meta.env.VITE_API_URL;
+    const image_url = import.meta.env.VITE_IMAGE_URL;
+
+    const router = useRouter();
+    const modalShow = ref(false);
+    const imageUpload = ref(null);
+
+    // User 정보 Session에서 받아온다.
+    const user = ref(JSON.parse(sessionStorage.getItem("user")));
+    
+    // 기본 사진 설정
+    const editableImage = ref({
+      imageId: user.value.imageId,
+      imageUrl: user.value.imageUrl
+    });
+
+    const updateImage = ()=>{
+      editableImage.value = {
+        imageId:user.value?.imageId || null, 
+        imageUrl:user.value?.imageUrl ? `${imageUrl}${user.value.imageUrl}` : null
+      };
+      modalShow.value= true;
+    }
+
+    // Upload Component에서 emit된 imageId 및 imageUrl 값을 수신한다.
+    const receiveFileUpload = (id, url) => {
+        editableImage.value.imageId = id;
+        editableImage.value.imageUrl = url;
+        //console.log(editableImage.value.imageId);
+        //console.log(editableImage.value.imageUrl);
+    };
+
+    // 수정 버튼을 누르면 editableImage에서 받은 정보를, 
+    // userStore에서 객체 형태로 보내서 User의 정보를 업데이트한다.
+    const updateUserPicture = () =>{
+      const temp = {
+        ...store.userInfo,
+        imageId: editableImage.value.imageId,
+      }
+
+      axios.patch(`${REST_API_URL}/update`, temp)
+      .then((response)=>{
+        user.value.imageId = editableImage.value.imageId;
+        user.value.imageUrl = editableImage.value.imageUrl;
+
+        sessionStorage.setItem("user", JSON.stringify(user.value));
+
+        router.go();
+      })
+      .catch((error)=>{
+        console.log("Failed to update Information", error);
+      })
+
+      //console.log(temp);
+      
+      modalShow.value = false;
+    }
+   
 
     const store = useUserStore();
     onMounted(()=>{
-        store.getUserInfo()
+        store.getUserInfo();
+        //console.log(imageUrl, user.value.imageUrl);
     })
 
-    const user = ref(JSON.parse(sessionStorage.getItem("user")));
-
+    
     const imageUrl = import.meta.env.VITE_IMAGE_URL;
     const defaultImage = profileDefault;
     
@@ -232,13 +291,7 @@
     }))
 
     const update = async function(){
-
         store.updateInfo(myPageData.value); 
-        
-        // console.log(store.userInfo.userId);        
-        // console.log(store.userInfo.intro);
-        // console.log(store.userInfo.feedType);
-        
     }
     
     const jsonUserId = ref({});

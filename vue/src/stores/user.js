@@ -26,7 +26,7 @@ export const useUserStore = defineStore("user", ()=>{
     axios.get(`${REST_API_URL}/profile/${userId}`)
     .then((response)=>{
       userInfo.value = response.data;
-      // console.log("Get Profile Info", response.data);
+      console.log("Get Profile Info", response.data);
     }).catch((err)=>{
       console.log(err);
     })    
