@@ -22,7 +22,7 @@
     const props = defineProps({
         userId: {
             type: String,
-            required: true
+            default: ''
         },
         src: {
             type: String,

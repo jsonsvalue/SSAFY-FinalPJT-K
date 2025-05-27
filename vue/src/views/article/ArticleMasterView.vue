@@ -50,7 +50,7 @@
 
 <script setup>
     import axios from 'axios';
-    import { ref,onMounted,watch } from 'vue';
+    import { ref,onMounted,watch, onBeforeMount } from 'vue';
     import { useRouter,useRoute } from 'vue-router';
     import ArticleDetailComp from '@/components/article/ArticleDetailComp.vue';
     import ArticleCommentComp from '@/components/article/ArticleCommentComp.vue';
@@ -107,7 +107,7 @@
         }
     };
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
         if (route.query.comment) {
             setTimeout(() => {
                 toComment();
