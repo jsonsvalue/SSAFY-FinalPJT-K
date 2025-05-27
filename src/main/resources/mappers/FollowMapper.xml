@@ -42,4 +42,12 @@
 		;
 	</select>
 	
+	<select id = "isAlreadyFollowing" >
+		SELECT COUNT(*) > 0
+		FROM follow
+		WHERE user_id = #{userId}
+		AND follow_id = #{followId}
+		;
+	</select>
+	
 </mapper>

@@ -25,7 +25,7 @@
                 {{followStore.followList.length ? followStore.followList.length : 0}}
               </div>
               <small class="text-muted">
-                팔로워
+                팔로우
               </small>
 
             </div>
@@ -34,7 +34,7 @@
                 {{followStore.followerList.length ? followStore.followerList.length : 0}}
               </div>
               <small class="text-muted">
-                팔로우
+                팔로워
                </small>
             </div>
           </div>

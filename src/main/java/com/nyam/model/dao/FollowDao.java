@@ -18,4 +18,7 @@ public interface FollowDao {
 	// 상대 이용자를 Unfollow한다.
 	int unfollow(String userId, String followId);
 	
+	// 이미 Follow하는지 여부를 확인한다.
+	boolean isAlreadyFollowing(String userId, String followId);
+	
 }

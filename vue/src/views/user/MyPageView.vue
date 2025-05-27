@@ -19,7 +19,7 @@
           <div class="d-flex align-items-center">
             <div class="position-relative me-3">
               <img 
-                :src= "`${imageUrl}${store.userInfo?.imageUrl}`|| defaultImage"  
+                :src= "`${imageUrl}${user?.imageUrl}`|| defaultImage"  
                 alt="Profile" 
                 class="rounded-circle"
                 style="width: 60px; height: 60px; object-fit: cover"

@@ -13,9 +13,11 @@ export const useFollowStore = defineStore("follow", ()=>{
         axios.delete(`${REST_API_URL}/unfollow/${userId}?followId=${followId}`, userId, followId)
         .then((response)=>{
             console.log(response.data);
+            return true;
         })
         .catch((err)=>{
             console.log(err);
+            return false;
         })
     }
 
@@ -23,9 +25,11 @@ export const useFollowStore = defineStore("follow", ()=>{
         axios.post(`${REST_API_URL}/follow/${userId}?followId=${followId}`, userId, followId)
         .then((response)=>{
             console.log(response.data);
+            return true;
         })
         .catch((err)=>{
             console.log(err);
+            return false;
         })
     }
 
@@ -33,7 +37,7 @@ export const useFollowStore = defineStore("follow", ()=>{
         axios.get(`${REST_API_URL}/follow/getFollow/${userId}`)
         .then((response)=>{
             followList.value = response.data;
-            //console.log("FollowList retrieved", followList.value)
+            console.log("FollowList retrieved", followList.value)
         })
         .catch((err)=>{
             console.log("FollowList retrieval failed", err);
@@ -45,7 +49,7 @@ export const useFollowStore = defineStore("follow", ()=>{
         axios.get(`${REST_API_URL}/follow/getFollower/${userId}`)
         .then((response)=>{
             followerList.value = response.data;
-            //console.log("FollowerList retrieved", followerList.value)
+            console.log("FollowerList retrieved", followerList.value)
         })
         .catch((err)=>{
             console.log("FollowerList retrieval failed", err);

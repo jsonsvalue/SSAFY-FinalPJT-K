@@ -30,8 +30,11 @@
         </h5>
 
         <div class="d-flex align-items-center">
-            <b-button @click = "toggleFollow" variant="outline-primary" size="sm" class="me-2">
-                {{ isFollowing ? '팔로잉' : '팔로우' }}
+            <b-button @click = "toggleFollow" 
+            :variant=" isFollowing ? 'outline-secondary' : 'outline-primary'" 
+            size="sm" 
+            class="me-2">
+                {{ !isFollowing ? '팔로우' : '팔로잉' }}
             </b-button>
 
             <!-- <b-button variant="outline-secondary" size="sm" class="me-2">
@@ -65,29 +68,41 @@
     onMounted(()=>{
         userIdRoute.value = route.params.userId;
         userStore.getProfileInfo(userIdRoute.value);
-        followStore.getFollowList(loginUser.value.userId);
+        followStore.getFollowList(userIdRoute.value.userId);
+        followStore.getFollowerList(userIdRoute.value.userId);
     })
 
     // 상태 변수를 이용한 follow 처리.
-    // profileId와 followUser가 같으면 isFollowing = true처리한다.
+    // followerUser와 loginUserId가 같으면 isFollowing = true로 처리한다.
     const isFollowing = computed(()=>{
-        return followStore.followList?.some(
-            (followUser) => followUser.userId === userIdRoute.value
+        return followStore.followerList?.some(
+            (followerUser) => followerUser.userId === loginUser.value.userId
         )
     });
 
     // isFollowing 값에 따라 처리하는 함수를 다르게 한다.
     const toggleFollow = async()=>{
         const userId = loginUser.value.userId;
-        const profileId = userId.route;
+        const profileId = userIdRoute.value;
 
         if( !isFollowing.value ){
-            await followStore.followUser(userId, profileId);
+            const success = await followStore.followUser(userId, profileId);
+            
+            if(success){
+                followStore.followerList.push({userId : userId})
+            }
         }else{
-            await followStore.unfollowUser(userId, profileId);
+            const success = await followStore.unfollowUser(userId, profileId);
+            
+            if(success){
+                followStore.followerList = followStore.followerList.filter(
+                    (user) => user.userId !== userId
+                );
+
+            }
         }
 
-        await followStore.getFollowList(userId);
+        await followStore.getFollowerList(profileId);
     }
 
     /* 

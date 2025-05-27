@@ -16,6 +16,10 @@ public class FollowServiceImpl implements FollowService{
 	
 	@Override
 	public boolean followUser(String userId, String followId) {
+		if(followDao.isAlreadyFollowing(userId, followId)) {
+			return false;
+		}
+		
 		int result = followDao.follow(userId, followId);
 		
 		return result > 0;
