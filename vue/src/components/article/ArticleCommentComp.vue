@@ -5,7 +5,9 @@
             <template v-for="(c, index) in props.comment" :key="index">
                 <ArticleCommentSubComp :comment="c"></ArticleCommentSubComp>
             </template>
-            <ArticleCommentWriteComp :article-id="props.articleId"></ArticleCommentWriteComp>
+            <template v-if="isLogin">
+                <ArticleCommentWriteComp :article-id="props.articleId"></ArticleCommentWriteComp>
+            </template>
         </div>
     </div>
 </template>
@@ -15,6 +17,7 @@
     import ArticleCommentWriteComp from './ArticleCommentWriteComp.vue';
     import { computed, onMounted, ref} from 'vue';
     const count = ref(0);
+    const isLogin = ref(false)
     const props = defineProps({
         articleId: {
             type: Number,
@@ -25,7 +28,9 @@
             default: () => []
         }
     });
-    
+    onMounted(() => {
+        isLogin.value = sessionStorage.getItem('user') !== null;
+    });
     count.value = computed(() => props.comment.length);
 </script>
 
