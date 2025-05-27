@@ -50,6 +50,7 @@ const profile = () => {
     background-color: #e1e1e1;
     padding: 10px;
     border-radius: 5px;
+    margin-left: 15px;
     max-width: 700px;
 }
 

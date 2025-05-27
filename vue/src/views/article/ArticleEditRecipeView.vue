@@ -1,11 +1,21 @@
 <template>
     <div class="container">
         <div class="outline">
-            <h3>냠냠 수정</h3>
+            <h3>레시피 수정</h3>
             <div class="write-form">
                 <BInputGroup class="mb-3 content">
                     <BInputGroupText>내용</BInputGroupText>
                     <BFormTextarea v-model="article.content" placeholder="내용을 입력하세요" />
+                </BInputGroup>
+
+                <BInputGroup class="mb-3 ingredient">
+                    <BInputGroupText>재료</BInputGroupText>
+                    <BFormTextarea v-model="article.ingredient" placeholder=
+"예시)
+감자 2개, 양파 1개, 고추장 1큰술, 간장 1큰술, 다진마늘 1작은술" 
+                        rows="3" 
+                        maxlength="1000" 
+/>
                 </BInputGroup>
             </div>
             <ImageUploadComp style="height: 500px;" :image="article"/>
@@ -40,7 +50,7 @@
     const article = ref({
         id: null,
         userId: null,
-        type: 'eat',
+        type: 'recipe',
         content: '',
         ingredient: '',
         imageId: null,
@@ -74,7 +84,6 @@
         }
         axios.patch(url,params)
         .then(res => {
-            console.log(res)
             router.push(`/article/${article.value.id}`);
         })
         .catch(err => {
@@ -177,5 +186,9 @@
         width: 100%;
         height: 50px;
         margin-top: 10px;
+    }
+
+    .ingredient {
+        height: 200px;
     }
 </style>

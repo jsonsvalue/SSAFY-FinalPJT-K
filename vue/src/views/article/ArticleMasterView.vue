@@ -37,7 +37,7 @@
                     <div class="comment" @click="toComment"><img src="../../assets/icon/comment.svg"/></div>
                     <div class="share" @click="share"><img src="https://www.svgrepo.com/show/512829/share-1100.svg"/></div>
                 </div>
-                <div class="writer-botton">
+                <div class="writer-botton" v-if="isWriter">
                     <button class="btn btn-secondary" @click="goUpdate">수정</button>
                     <button class="btn btn-warning" @click="doDelete">삭제</button>
                 </div>
